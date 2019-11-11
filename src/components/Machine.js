@@ -2,7 +2,7 @@ import React from 'react'
 import { State, calcStateWidth } from './State'
 import Transition from './Transition'
 
-export const Machine = ({ states, transitions, viz }) => {
+export const Machine = ({ states, transitions, viz, machine }) => {
   
   const x = viz.x || 0
   const y = viz.y || 0
@@ -19,6 +19,7 @@ export const Machine = ({ states, transitions, viz }) => {
   const stateNodes = stateNodesPrep.map(({ x, y, state }) => <State
     x={x}
     y={y+offsetY}
+    isActive={machine.isCurrentState(state.id)}
     { ...state }
   />)
 
@@ -34,6 +35,8 @@ export const Machine = ({ states, transitions, viz }) => {
     offsetRightY={offsetRightY}
     offsetTargetX={offsetTargetX}
     offsetY={offsetY}
+    isAvailable={machine.isCurrentState(transition.source)}
+    onClick={() => machine.input(transition.event)}
   />)
 
   return <g>

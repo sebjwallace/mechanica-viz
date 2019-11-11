@@ -4,7 +4,7 @@ const height = 25
 const textTopPadding = height / 2 + 5
 const textLeftPadding = 5
 
-export const State = ({ x, y, id }) => {
+export const State = ({ x, y, id, isActive }) => {
 
   const key = `${x}${y}${id}`
   const width = calcStateWidth(id)
@@ -16,7 +16,7 @@ export const State = ({ x, y, id }) => {
       x={x}
       y={y}
       style={{
-        fill: 'white',
+        fill: isActive ? 'lightgray' : 'white',
         strokeWidth: 2,
         stroke: 'grey'
       }}

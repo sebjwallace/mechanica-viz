@@ -8,7 +8,9 @@ export default ({
   offsetLeftY,
   offsetRightY,
   offsetTargetX,
-  offsetY
+  offsetY,
+  isAvailable,
+  onClick
 }) => {
 
   const { x: x1, y: y1, w: w1 } = statePositions[source]
@@ -53,51 +55,59 @@ export default ({
   const tx = px1 + ((px2 - px1) / 2) - (tw / 2)
   const ty = py1 + offset + 4
 
+  const strokeColor = isAvailable ? 'black' : 'lightgray'
+  const textColor = isAvailable ? 'white' : 'black'
+  const textBackgroundColor = isAvailable ? 'black' : 'white'
   const key = source+target+event
 
-  return <g key={key}>
+  return <g key={key} onClick={onClick}>
     <line
       x1={px1}
       y1={py1}
       x2={px1}
       y2={py1+offset}
-      stroke='black'
+      stroke={strokeColor}
     />
     <line
       x1={px1}
       y1={py1+offset}
       x2={px2}
       y2={py2+offset}
-      stroke='black'
+      stroke={strokeColor}
     />
     <line
       x1={px2}
       y1={py2+offset}
       x2={px2}
       y2={py2}
-      stroke='black'
+      stroke={strokeColor}
     />
     <polygon
       points={arrowPath}
       style={{
-        fill: 'black'
+        fill: strokeColor
       }}
     />
     <rect
-      width={tw+2}
+      width={tw+4}
       height={12}
       x={tx-2}
       y={ty-10}
       style={{
-        fill: '#f2f2f2',
+        fill: textBackgroundColor,
+        stroke: textBackgroundColor,
         strokeWidth: 1,
-        stroke: 'black'
+        cursor: 'pointer'
       }}
     />
     <text
       x={tx}
       y={ty}
       fontSize={fontSize}
+      style={{
+        fill: textColor,
+        cursor: 'pointer'
+      }}
     >
       { event }
     </text>

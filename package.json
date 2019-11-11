@@ -1,11 +1,12 @@
 {
-  "name": "mechanica-viz",
+  "name": "rithmic-viz",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-scripts": "3.2.0",
+    "use-force-update": "^1.0.7",
     "xstate": "^4.6.7"
   },
   "scripts": {

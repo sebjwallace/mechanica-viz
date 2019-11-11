@@ -1,182 +1,298 @@
-import React from 'react';
+import React from 'react'
+import useForceUpdate from 'use-force-update'
 
 import { Machine, calcMachineDims } from './components/Machine'
 import Message from './components/Message'
 
+import Rithmic from './engine/Rithmic'
+
 const schema = {
-  groups: [
-    {
-      title: 'oven',
-      members: ['switch', 'light']
-    }
-  ],
   machines: [
     {
-      id: 'switch',
+      id: 'AND1',
       tags: [
-        'device'
+        'gate'
       ],
       states: [
         {
           id: 'ON',
-          initial: true
+          send: '1'
         },
         {
-          id: 'OFF'
+          id: 'OFF',
+          initial: true,
+          send: '0'
         },
         {
-          id: 'IDLE'
+          id: 'X'
+        },
+        {
+          id: 'Y'
         }
       ],
       transitions: [
         {
-          event: 'FLIP',
-          source: 'ON',
-          target: 'OFF',
-          actions: ['turnOff'],
-          messages: ['flip']
-        },
-        {
-          event: 'FLIP',
           source: 'OFF',
-          target: 'ON',
-          actions: ['turnOff'],
-          messages: ['flip']
+          event: '1',
+          target: 'X'
         },
         {
-          event: 'FLIP',
+          source: 'OFF',
+          event: '0',
+          target: 'Y'
+        },
+        {
           source: 'ON',
-          target: 'IDLE'
+          event: '1',
+          target: 'X'
         },
         {
-          event: 'KNOCK',
           source: 'ON',
-          target: 'IDLE'
+          event: '0',
+          target: 'Y'
         },
         {
-          event: 'KNOCK',
-          source: 'IDLE',
-          target: 'ON'
-        },
-        {
-          event: 'KNOCK',
-          source: 'IDLE',
+          source: 'Y',
+          event: '1',
           target: 'OFF'
+        },
+        {
+          source: 'Y',
+          event: '0',
+          target: 'OFF'
+        },
+        {
+          source: 'X',
+          event: '0',
+          target: 'OFF'
+        },
+        {
+          source: 'X',
+          event: '1',
+          target: 'ON'
         }
       ],
       messages: [
         {
-          id: 'flip',
-          event: 'FLIP',
-          payload: {},
+          id: '0',
+          event: '0',
           target: {
-            ids: [
-              'light'
-            ],
-            tags: [
-              'button'
-            ]
+            ids: ['AND3']
+          }
+        },
+        {
+          id: '1',
+          event: '1',
+          target: {
+            ids: ['AND3']
           }
         }
       ],
-      actions: {
-        turnOff(){}
-      },
       viz: {
         x: 50,
         y: 50
       }
     },
     {
-      id: 'light',
-      states: [
-        { id: 'ON' },
-        { id: 'OFF' }
+      id: 'AND2',
+      tags: [
+        'gate'
       ],
-      transitions: [
+      states: [
         {
-          event: 'FLIP',
-          source: 'ON',
-          target: 'OFF'
+          id: 'ON',
+          send: '1'
         },
         {
-          event: 'FLIP',
-          source: 'OFF',
-          target: 'ON'
+          id: 'OFF',
+          send: '0',
+          initial: true
+        },
+        {
+          id: 'X'
+        },
+        {
+          id: 'Y'
         }
       ],
-      viz: {
-        x: 400,
-        y: 200
-      }
-    },
-    {
-      id: 'beep',
-      states: [
-        { id: 'ON' },
-        { id: 'OFF' }
-      ],
       transitions: [
         {
-          event: 'FLIP',
+          source: 'OFF',
+          event: '1',
+          target: 'X'
+        },
+        {
+          source: 'OFF',
+          event: '0',
+          target: 'Y'
+        },
+        {
           source: 'ON',
+          event: '1',
+          target: 'X'
+        },
+        {
+          source: 'ON',
+          event: '0',
+          target: 'Y'
+        },
+        {
+          source: 'Y',
+          event: '1',
           target: 'OFF'
         },
         {
-          event: 'FLIP',
-          source: 'OFF',
+          source: 'Y',
+          event: '0',
+          target: 'OFF'
+        },
+        {
+          source: 'X',
+          event: '1',
           target: 'ON'
+        },
+        {
+          source: 'X',
+          event: '0',
+          target: 'OFF'
         }
       ],
       messages: [
         {
-          id: 'flip',
-          event: 'FLIP',
-          payload: {},
+          id: '0',
+          event: '0',
           target: {
-            ids: [
-              'light'
-            ]
+            ids: ['AND3']
+          }
+        },
+        {
+          id: '1',
+          event: '1',
+          target: {
+            ids: ['AND3']
           }
         }
       ],
       viz: {
-        x: 700,
-        y: 50
+        x: 50,
+        y: 250
+      }
+    },
+    {
+      id: 'AND3',
+      tags: [
+        'gate'
+      ],
+      states: [
+        {
+          id: 'ON'
+        },
+        {
+          id: 'OFF',
+          initial: true
+        },
+        {
+          id: 'X'
+        },
+        {
+          id: 'Y'
+        }
+      ],
+      transitions: [
+        {
+          source: 'OFF',
+          event: '1',
+          target: 'X'
+        },
+        {
+          source: 'OFF',
+          event: '0',
+          target: 'Y'
+        },
+        {
+          source: 'ON',
+          event: '1',
+          target: 'X'
+        },
+        {
+          source: 'ON',
+          event: '0',
+          target: 'Y'
+        },
+        {
+          source: 'Y',
+          event: '1',
+          target: 'OFF'
+        },
+        {
+          source: 'Y',
+          event: '0',
+          target: 'OFF'
+        },
+        {
+          source: 'X',
+          event: '1',
+          target: 'ON'
+        },
+        {
+          source: 'X',
+          event: '0',
+          target: 'OFF'
+        }
+      ],
+      viz: {
+        x: 400,
+        y: 150
       }
     }
   ]
 }
 
+const machines = schema.machines.map(schema => Rithmic.create(schema))
+
 function App() {
 
-  const { machines } = schema
+  const forceUpdate = useForceUpdate()
 
-  const machineDims = machines.reduce((accum, machine) => ({
+  machines.forEach(machine => machine.onChange = () => forceUpdate())
+
+  const machineDims = schema.machines.reduce((accum, machine) => ({
     ...accum,
     [machine.id]: calcMachineDims(machine)
   }), {})
 
-  const machineNodes = machines.map(machine => {
+  const machineNodes = schema.machines.map((machine, i) => {
     return <Machine
       { ...machine }
+      machine={machines[i]}
     />
   })
 
-  const messages = machines.reduce((accum, machine) => {
+  const messages = schema.machines.reduce((accum, machine, i) => {
     if(!machine.messages) return accum
-    const messages = machine.messages.map(message => ({
-      source: machine.id,
-      target: message.target.ids[0],
-      event: message.event
-    }))
+    const messages = machine.messages.map(message => {
+      const source = machine.id
+      const target = message.target.ids[0]
+      const isActive = machines[i].state.send
+      return {
+        source,
+        target,
+        event: message.event,
+        isActive: Boolean(isActive)
+      }
+    })
     return [
       ...accum,
       ...messages
     ]
   }, [])
 
-  const messageNodes = messages.map(({ source, target, event }) => {
+  const edgeCounts = {}
+  const messageNodes = messages.map(({ source, target, event, isActive }) => {
+    if(edgeCounts[source+target]) return null
+    edgeCounts[source+target] = true
+    if(!edgeCounts[target]) edgeCounts[target] = 0
+    edgeCounts[target] += 1
     return <Message
       source={{
         id: source,
@@ -193,6 +309,8 @@ function App() {
         height: machineDims[target].height
       }}
       event={event}
+      targetEdgeCount={edgeCounts[target]}
+      isActive={isActive}
     />
   })
 
