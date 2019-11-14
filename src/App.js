@@ -19,72 +19,85 @@ const schema = {
           send: '1'
         },
         {
+          id: 'IDLE',
+          initial: true
+        },
+        {
           id: 'OFF',
-          initial: true,
           send: '0'
         },
-        {
-          id: 'X'
-        },
-        {
-          id: 'Y'
-        }
+        // {
+        //   id: 'X'
+        // },
+        // {
+        //   id: 'Y'
+        // }
       ],
       transitions: [
         {
           source: 'OFF',
-          event: '1',
-          target: 'X'
+          event: 'FLIP',
+          target: 'IDLE'
         },
         {
-          source: 'OFF',
-          event: '0',
-          target: 'Y'
-        },
-        {
-          source: 'ON',
-          event: '1',
-          target: 'X'
-        },
-        {
-          source: 'ON',
-          event: '0',
-          target: 'Y'
-        },
-        {
-          source: 'Y',
-          event: '1',
+          source: 'IDLE',
+          event: 'OFF',
           target: 'OFF'
         },
         {
-          source: 'Y',
-          event: '0',
-          target: 'OFF'
-        },
-        {
-          source: 'X',
-          event: '0',
-          target: 'OFF'
-        },
-        {
-          source: 'X',
-          event: '1',
+          source: 'IDLE',
+          event: 'ON',
           target: 'ON'
-        }
+        },
+        {
+          source: 'ON',
+          event: 'FLIP',
+          target: 'IDLE'
+        },
+        // {
+        //   source: 'ON',
+        //   event: '1',
+        //   target: 'X'
+        // },
+        // {
+        //   source: 'ON',
+        //   event: '0',
+        //   target: 'Y'
+        // },
+        // {
+        //   source: 'Y',
+        //   event: '1',
+        //   target: 'OFF'
+        // },
+        // {
+        //   source: 'Y',
+        //   event: '0',
+        //   target: 'OFF'
+        // },
+        // {
+        //   source: 'X',
+        //   event: '0',
+        //   target: 'OFF'
+        // },
+        // {
+        //   source: 'X',
+        //   event: '1',
+        //   target: 'ON'
+        // }
       ],
       messages: [
         {
           id: '0',
           event: '0',
           target: {
-            ids: ['AND3']
+            ids: ['AND2']
           }
         },
         {
           id: '1',
           event: '1',
           target: {
-            ids: ['AND3']
+            ids: ['AND2']
           }
         }
       ],
@@ -101,150 +114,150 @@ const schema = {
       states: [
         {
           id: 'ON',
-          send: '1'
+          // send: '1'
         },
         {
           id: 'OFF',
-          send: '0',
+          // send: '0',
           initial: true
         },
-        {
-          id: 'X'
-        },
-        {
-          id: 'Y'
-        }
+        // {
+        //   id: 'X'
+        // },
+        // {
+        //   id: 'Y'
+        // }
       ],
       transitions: [
         {
-          source: 'OFF',
-          event: '1',
-          target: 'X'
-        },
-        {
-          source: 'OFF',
-          event: '0',
-          target: 'Y'
-        },
-        {
           source: 'ON',
-          event: '1',
-          target: 'X'
-        },
-        {
-          source: 'ON',
-          event: '0',
-          target: 'Y'
-        },
-        {
-          source: 'Y',
-          event: '1',
-          target: 'OFF'
-        },
-        {
-          source: 'Y',
           event: '0',
           target: 'OFF'
         },
         {
-          source: 'X',
+          source: 'OFF',
           event: '1',
           target: 'ON'
         },
-        {
-          source: 'X',
-          event: '0',
-          target: 'OFF'
-        }
+        // {
+        //   source: 'ON',
+        //   event: '1',
+        //   target: 'X'
+        // },
+        // {
+        //   source: 'ON',
+        //   event: '0',
+        //   target: 'Y'
+        // },
+        // {
+        //   source: 'Y',
+        //   event: '1',
+        //   target: 'OFF'
+        // },
+        // {
+        //   source: 'Y',
+        //   event: '0',
+        //   target: 'OFF'
+        // },
+        // {
+        //   source: 'X',
+        //   event: '1',
+        //   target: 'ON'
+        // },
+        // {
+        //   source: 'X',
+        //   event: '0',
+        //   target: 'OFF'
+        // }
       ],
       messages: [
-        {
-          id: '0',
-          event: '0',
-          target: {
-            ids: ['AND3']
-          }
-        },
-        {
-          id: '1',
-          event: '1',
-          target: {
-            ids: ['AND3']
-          }
-        }
-      ],
-      viz: {
-        x: 50,
-        y: 250
-      }
-    },
-    {
-      id: 'AND3',
-      tags: [
-        'gate'
-      ],
-      states: [
-        {
-          id: 'ON'
-        },
-        {
-          id: 'OFF',
-          initial: true
-        },
-        {
-          id: 'X'
-        },
-        {
-          id: 'Y'
-        }
-      ],
-      transitions: [
-        {
-          source: 'OFF',
-          event: '1',
-          target: 'X'
-        },
-        {
-          source: 'OFF',
-          event: '0',
-          target: 'Y'
-        },
-        {
-          source: 'ON',
-          event: '1',
-          target: 'X'
-        },
-        {
-          source: 'ON',
-          event: '0',
-          target: 'Y'
-        },
-        {
-          source: 'Y',
-          event: '1',
-          target: 'OFF'
-        },
-        {
-          source: 'Y',
-          event: '0',
-          target: 'OFF'
-        },
-        {
-          source: 'X',
-          event: '1',
-          target: 'ON'
-        },
-        {
-          source: 'X',
-          event: '0',
-          target: 'OFF'
-        }
+        // {
+        //   id: '0',
+        //   event: '0',
+        //   target: {
+        //     ids: ['AND3']
+        //   }
+        // },
+        // {
+        //   id: '1',
+        //   event: '1',
+        //   target: {
+        //     ids: ['AND3']
+        //   }
+        // }
       ],
       viz: {
         x: 400,
-        y: 150
+        y: 50
       }
-    }
+    },
+    // {
+    //   id: 'AND3',
+    //   tags: [
+    //     'gate'
+    //   ],
+    //   states: [
+    //     {
+    //       id: 'ON'
+    //     },
+    //     {
+    //       id: 'OFF',
+    //       initial: true
+    //     },
+    //     {
+    //       id: 'X'
+    //     },
+    //     {
+    //       id: 'Y'
+    //     }
+    //   ],
+    //   transitions: [
+    //     {
+    //       source: 'OFF',
+    //       event: '1',
+    //       target: 'X'
+    //     },
+    //     {
+    //       source: 'OFF',
+    //       event: '0',
+    //       target: 'Y'
+    //     },
+    //     {
+    //       source: 'ON',
+    //       event: '1',
+    //       target: 'X'
+    //     },
+    //     {
+    //       source: 'ON',
+    //       event: '0',
+    //       target: 'Y'
+    //     },
+    //     {
+    //       source: 'Y',
+    //       event: '1',
+    //       target: 'OFF'
+    //     },
+    //     {
+    //       source: 'Y',
+    //       event: '0',
+    //       target: 'OFF'
+    //     },
+    //     {
+    //       source: 'X',
+    //       event: '1',
+    //       target: 'ON'
+    //     },
+    //     {
+    //       source: 'X',
+    //       event: '0',
+    //       target: 'OFF'
+    //     }
+    //   ],
+    //   viz: {
+    //     x: 400,
+    //     y: 150
+    //   }
+    // }
   ]
 }
 
