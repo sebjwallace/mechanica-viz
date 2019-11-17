@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { portPosition } from '../utils/positioning'
 
 export default ({
   x,
@@ -6,7 +7,8 @@ export default ({
   width,
   height,
   scale = 1,
-  onChange = () => {}
+  onChange = () => {},
+  onPortMouseDown = () => {}
 }) => {
 
   const [ state, setState ] = useState({})
@@ -17,35 +19,19 @@ export default ({
   height = height * scale
 
   const portSize = 5
-  const portRadius = portSize / 2
-  const portSpacingX = width / 6
-  const portSpacingY = height / 4
 
-  const topPortPosition = (i) => ({
-    x: x + portSpacingX * i - portRadius,
-    y: y - portRadius
-  })
-
-  const bottomPortPosition = (i) => ({
-    x: x + portSpacingX * i - portRadius,
-    y: y + height - portRadius
-  })
-
-  const leftPortPosition = (i) => ({
-    x: x - portRadius,
-    y: y + portSpacingY * i - portRadius
-  })
-
-  const rightPortPosition = (i) => ({
-    x: x + width - portRadius,
-    y: y + portSpacingY * i - portRadius
-  })
+  const createPort = (props) => Array.from({ length: props.number }).map((v, i) => ({
+    ...props, i,
+    ...portPosition({
+      ...props, x, y, width, height, i: i + 1
+    })
+  }))
 
   const ports = [
-    ...Array.from({ length: 5 }).map((v, i) => topPortPosition(i+1)),
-    ...Array.from({ length: 5 }).map((v, i) => bottomPortPosition(i+1)),
-    ...Array.from({ length: 3 }).map((v, i) => leftPortPosition(i+1)),
-    ...Array.from({ length: 3 }).map((v, i) => rightPortPosition(i+1)),
+    ...createPort({ side: 'top', number: 5 }),
+    ...createPort({ side: 'bottom', number: 5 }),
+    ...createPort({ side: 'left', number: 3 }),
+    ...createPort({ side: 'right', number: 3 })
   ]
 
   const handleRadius = 4
@@ -107,6 +93,12 @@ export default ({
     }
   }
 
+  const showControls = state.isMouseOver || state.handler
+  const hoverEvents = {
+    onMouseEnter: () => setState({ isMouseOver: true }),
+    onMouseLeave: () => setState({ isMouseOver: false })
+  }
+
   return <g>
     <rect
       x={x}
@@ -121,9 +113,10 @@ export default ({
       onMouseDown={() => setState({ handler: 'move' })}
       onMouseUp={() => setState({ handler: false })}
       onMouseMove={handlers[state.handler]}
+      { ...hoverEvents }
     />
     {
-      ports.map(({ x, y }) => <rect
+      showControls && ports.map(({ x, y, i, side }) => <rect
         key={`port-${x}-${y}`}
         x={x}
         y={y}
@@ -134,20 +127,23 @@ export default ({
           stroke: 'gray',
           fill: 'white'
         }}
+        onMouseDown={() => onPortMouseDown({ i, side, x, y })}
+        { ...hoverEvents }
       />)
     }
     {
-      handles.map(({ x, y, handler }) => <circle
+      showControls && handles.map(({ x, y, handler }) => <circle
         key={`handle-${x}-${y}`}
         cx={x}
         cy={y}
         r={handleRadius}
-        fill="white"
+        fill="gray"
         strokeWidth={1}
         stroke="gray"
         onMouseDown={() => setState({ handler }) && onChange({ mouseMoveHandler: handler })}
         onMouseUp={() => setState({ handler: '' })}
         onMouseMove={handlers[state.handler]}
+        { ...hoverEvents }
       />)
     }
   </g>
