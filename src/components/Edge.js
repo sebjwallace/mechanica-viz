@@ -2,7 +2,9 @@ import React, { useState } from 'react'
 
 export default ({
   sourceX, sourceY,
-  targetX, targetY
+  targetX, targetY,
+  points,
+  onChange = () => {}
 }) => {
 
   const [ state, setState ] = useState({})
@@ -11,45 +13,18 @@ export default ({
   const portRadius = portSize / 2
   sourceY = sourceY + portRadius
   targetY = targetY + portRadius
-  const width = targetX - sourceX
- 
-  const lines = [
-    {
-      x1: sourceX,
-      y1: sourceY,
-      x2: sourceX + width / 2,
-      y2: sourceY
-    },
-    {
-      x1: sourceX + width / 2,
-      y1: sourceY,
-      x2: sourceX + width / 2,
-      y2: targetY
-    },
-    {
-      x1: sourceX + width / 2,
-      y1: targetY,
-      x2: targetX,
-      y2: targetY
-    }
-  ]
 
-  const key = `edge-${sourceX}-${sourceY}-${targetX}-${targetY}`
+  const path = points.reduce((path, { x, y }) => {
+    return `${path} L ${x} ${y}`
+  }, `M ${sourceX} ${sourceY}`) + ` L ${targetX} ${targetY}`
 
-  return <g key={key}>
-    {
-      lines.map(({ x1, y1, x2, y2 }, i) => <line
-        key={i}
-        x1={x1}
-        y1={y1}
-        x2={x2}
-        y2={y2}
-        style={{
-          stroke: 'gray',
-          strokeWidth: 2
-        }}
-      />)
-    }
+  return <g key={path}>
+    <path
+      d={path}
+      strokeWidth={2}
+      stroke="gray"
+      fill="none"
+    />
     <rect
       x={sourceX}
       y={sourceY - portRadius}
@@ -72,6 +47,23 @@ export default ({
         fill: 'gray'
       }}
     />
+    {
+      points.map(({ x, y }, i) => <circle
+        cx={x}
+        cy={y}
+        r={state.isMouseDown ? 20 : 5}
+        fill={state.isVisible ? 'gray' : 'transparent'}
+        onMouseEnter={() => setState({ isVisible: true })}
+        onMouseLeave={() => setState({ isVisible: false })}
+        onMouseDown={() => setState({ isMouseDown: true })}
+        onMouseUp={() => setState({ isMouseDown: false })}
+        onMouseMove={({ movementX, movementY }) => {
+          if(!state.isMouseDown) return
+          points[i] = { x: x + movementX, y: y + movementY }
+          onChange({ points })
+        }}
+      />)
+    }
   </g>
 
 }

@@ -7,40 +7,40 @@ import { portPosition } from '../utils/positioning'
 export default () => {
 
   const [ state, setState ] = useState({
-    node1: {
-      x: 20,
-      y: 20,
-      width: 100,
-      height: 50
-    },
-    node2: {
-      x: 200,
-      y: 100,
-      width: 100,
-      height: 50
-    },
-    edge: {
-      source: {
+    nodes: [
+      {
         id: 'node1',
-        port: ['right', 2]
+        x: 20,
+        y: 20,
+        width: 100,
+        height: 50
       },
-      target: {
+      {
         id: 'node2',
-        port: ['left', 1]
+        x: 200,
+        y: 100,
+        width: 100,
+        height: 50
       }
-    }
-  })
-
-  const sourcePos = portPosition({
-    side: state.edge.source.port[0],
-    i: state.edge.source.port[1],
-    ...state[state.edge.source.id]
-  })
-
-  const targetPos = portPosition({
-    side: state.edge.target.port[0],
-    i: state.edge.target.port[1],
-    ...state[state.edge.target.id]
+    ],
+    edges: [
+      {
+        source: {
+          id: 'node1',
+          panel: 'right',
+          port: 1
+        },
+        target: {
+          id: 'node2',
+          panel: 'left',
+          port: 1
+        },
+        points: [
+          { x: 150, y: 35 },
+          { x: 150, y: 100 }
+        ]
+      }
+    ]
   })
 
   return <div>
@@ -48,38 +48,49 @@ export default () => {
       width="500"
       height="500"
     >
-      <Node
-        x={state.node1.x}
-        y={state.node1.y}
-        width={state.node1.width}
-        height={state.node1.height}
-        onChange={(updates) => setState({
-          ...state,
-          node1: {
-            ...state.node1,
-            ...updates
-          }
-        })}
-      />
-      <Node
-        x={state.node2.x}
-        y={state.node2.y}
-        width={state.node2.width}
-        height={state.node2.height}
-        onChange={(updates) => setState({
-          ...state,
-          node2: {
-            ...state.node2,
-            ...updates
-          }
-        })}
-      />
-      <Edge
-        sourceX={sourcePos.x}
-        sourceY={sourcePos.y}
-        targetX={targetPos.x}
-        targetY={targetPos.y}
-      />
+      {
+        state.nodes.map((node, i) => <Node
+          x={node.x}
+          y={node.y}
+          width={node.width}
+          height={node.height}
+          onChange={(updates) => {
+            state.nodes[i] = {
+              ...state.nodes[i],
+              ...updates
+            }
+            setState({ ...state })
+          }}
+        />)
+      }
+      {
+        state.edges.map(({ source, target, points }, i) => {
+          const sourcePos = portPosition({
+            side: source.panel,
+            i: source.port,
+            ...state.nodes.find(node => node.id === source.id)
+          })
+          const targetPos = portPosition({
+            side: target.panel,
+            i: target.port,
+            ...state.nodes.find(node => node.id === target.id)
+          })
+          return <Edge
+            sourceX={sourcePos.x}
+            sourceY={sourcePos.y}
+            targetX={targetPos.x}
+            targetY={targetPos.y}
+            points={points}
+            onChange={(updates) => {
+              state.edges[i] = {
+                ...state.edges[i],
+                ...updates
+              }
+              setState({ ...state })
+            }}
+          />
+        })
+      }
     </svg>
   </div>
 

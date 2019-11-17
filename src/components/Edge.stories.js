@@ -14,9 +14,9 @@ export const node = () => React.createElement(() => {
 
   return <div>
     <svg width="500" height="500">
-      <Edge
+      {/* <Edge
         { ...state }
-      />
+      /> */}
     </svg>
   </div>
 
