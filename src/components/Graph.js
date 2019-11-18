@@ -2,11 +2,13 @@ import React, { useState } from 'react'
 
 import Node from './Node.js'
 import Edge from './Edge.js'
+import NewEdge from './NewEdge'
 import { portPosition } from '../utils/positioning'
 
 export default () => {
 
   const [ state, setState ] = useState({
+    newEdge: false,
     nodes: [
       {
         id: 'node1',
@@ -23,24 +25,7 @@ export default () => {
         height: 50
       }
     ],
-    edges: [
-      {
-        source: {
-          id: 'node1',
-          panel: 'right',
-          port: 1
-        },
-        target: {
-          id: 'node2',
-          panel: 'left',
-          port: 1
-        },
-        points: [
-          { x: 150, y: 35 },
-          { x: 150, y: 100 }
-        ]
-      }
-    ]
+    edges: []
   })
 
   return <div>
@@ -48,6 +33,19 @@ export default () => {
       width="500"
       height="500"
     >
+      {
+        state.newEdge && <NewEdge
+          startX={state.newEdge.x}
+          startY={state.newEdge.y}
+          onChange={(points) => setState({
+            ...state,
+            newEdge: {
+              ...state.newEdge,
+              points
+            }
+          })}
+        />
+      }
       {
         state.nodes.map((node, i) => <Node
           x={node.x}
@@ -60,6 +58,36 @@ export default () => {
               ...updates
             }
             setState({ ...state })
+          }}
+          onPortMouseDown={({ x, y, side, i }) => {
+            if(state.newEdge){
+              const point = state.newEdge.points[state.newEdge.points.length-1]
+              const dx = Math.abs(x - point.x)
+              const dy = Math.abs(y - point.y)
+              point.x = dx < dy ? x : point.x
+              point.y = dy < dx ? y : point.y
+              state.edges.push({
+                source: state.newEdge,
+                target: {
+                  id: node.id,
+                  panel: side,
+                  port: i + 1
+                },
+                points: state.newEdge.points
+              })
+              setState({ ...state, newEdge: null })
+            }
+            else {
+              setState({
+                ...state,
+                newEdge: {
+                  id: node.id,
+                  x, y,
+                  panel: side,
+                  port: i + 1
+                }
+              })
+            }
           }}
         />)
       }

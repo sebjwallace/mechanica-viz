@@ -8,7 +8,8 @@ export default ({
   height,
   scale = 1,
   onChange = () => {},
-  onPortMouseDown = () => {}
+  onPortMouseDown = () => {},
+  onPortMouseEnter = () => {}
 }) => {
 
   const [ state, setState ] = useState({})
@@ -128,7 +129,11 @@ export default ({
           fill: 'white'
         }}
         onMouseDown={() => onPortMouseDown({ i, side, x, y })}
-        { ...hoverEvents }
+        onMouseEnter={() => {
+          onPortMouseEnter({ i, side, x, y })
+          setState({ isMouseOver: true })
+        }}
+        onMouseLeave={() => setState({ isMouseOver: false })}
       />)
     }
     {
