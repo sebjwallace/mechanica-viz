@@ -1,18 +1,18 @@
 import React, { useState } from 'react'
+import r from 'rithmic'
 import { portPosition } from '../utils/positioning'
 
+const send = () => {}
+
 export default ({
+  id,
   x,
   y,
   width,
   height,
   scale = 1,
-  onChange = () => {},
-  onPortMouseDown = () => {},
-  onPortMouseEnter = () => {}
+  selected
 }) => {
-
-  const [ state, setState ] = useState({})
 
   x = x * scale
   y = y * scale
@@ -41,67 +41,30 @@ export default ({
     {
       x,
       y,
-      handler: 'resizeTL'
+      position: 'TL'
     },
     {
       x: x + width,
       y,
-      handler: 'resizeTR'
+      position: 'TR'
     },
     {
       x,
       y: y + height,
-      handler: 'resizeBL'
+      position: 'BL'
     },
     {
       x: x + width,
       y: y + height,
-      handler: 'resizeBR'
+      position: 'BR'
     }
   ]
 
-  const handlers = {
-    move: ({ movementX, movementY }) => {
-      onChange({ x: x + movementX, y: y + movementY })
-    },
-    resizeTL: ({ movementX, movementY }) => {
-      onChange({
-        x: x + movementX,
-        y: y + movementY,
-        width: width - movementX,
-        height: height - movementY
-      })
-    },
-    resizeTR: ({ movementX, movementY }) => {
-      onChange({
-        y: y + movementY,
-        width: width + movementX,
-        height: height - movementY
-      })
-    },
-    resizeBL: ({ movementX, movementY }) => {
-      onChange({
-        x: x + movementX,
-        width: width - movementX,
-        height: height + movementY
-      })
-    },
-    resizeBR: ({ movementX, movementY }) => {
-      onChange({
-        width: width + movementX,
-        height: height + movementY
-      })
-    }
-  }
-
-  const showControls = state.isMouseOver || state.handler
-  const hoverEvents = {
-    onMouseEnter: () => setState({ isMouseOver: true }),
-    onMouseLeave: () => setState({ isMouseOver: false })
-  }
+  const fill = selected ? 'lightgray' : 'white'
 
   return <g>
     <rect
+      key={id}
       x={x}
       y={y}
       width={width}
@@ -109,15 +72,13 @@ export default ({
       style={{
         strokeWidth: 2,
         stroke: 'gray',
-        fill: 'white'
+        fill
       }}
-      onMouseDown={() => setState({ handler: 'move' })}
-      onMouseUp={() => setState({ handler: false })}
-      onMouseMove={handlers[state.handler]}
-      { ...hoverEvents }
+      onMouseDown={() => r.send('nodeMouseDown', { id })}
+      onMouseUp={e => r.send('nodeMouseUp', e)}
     />
     {
-      showControls && ports.map(({ x, y, i, side }) => <rect
+      selected && ports.map(({ x, y, i, side }) => <rect
         key={`port-${x}-${y}`}
         x={x}
         y={y}
@@ -128,16 +89,13 @@ export default ({
           stroke: 'gray',
           fill: 'white'
         }}
-        onMouseDown={() => onPortMouseDown({ i, side, x, y })}
-        onMouseEnter={() => {
-          onPortMouseEnter({ i, side, x, y })
-          setState({ isMouseOver: true })
-        }}
-        onMouseLeave={() => setState({ isMouseOver: false })}
+        onMouseDown={() => r.send('nodePortMouseDown', { i, side, x, y })}
+        onMouseEnter={() => send('nodePortMouseEnter', { i, side, x, y })}
+        onMouseLeave={() => () => send('nodePortMouseLeave', { i, side, x, y })}
       />)
     }
     {
-      showControls && handles.map(({ x, y, handler }) => <circle
+      selected && handles.map(({ x, y, position }) => <circle
         key={`handle-${x}-${y}`}
         cx={x}
         cy={y}
@@ -145,10 +103,8 @@ export default ({
         fill="gray"
         strokeWidth={1}
         stroke="gray"
-        onMouseDown={() => setState({ handler }) && onChange({ mouseMoveHandler: handler })}
-        onMouseUp={() => setState({ handler: '' })}
-        onMouseMove={handlers[state.handler]}
-        { ...hoverEvents }
+        onMouseDown={() => r.send('mouseDown', { position })}
+        onMouseUp={() => r.send('mouseUp')}
       />)
     }
   </g>
