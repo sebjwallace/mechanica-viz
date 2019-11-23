@@ -1,17 +1,18 @@
-import React, { useState } from 'react'
+import React from 'react'
 import r from 'rithmic'
+import Attach from './Attach'
 import { portPosition } from '../utils/positioning'
 
 const send = () => {}
 
-export default ({
+const Node = ({
   id,
   x,
   y,
   width,
   height,
-  scale = 1,
-  selected
+  selected,
+  scale = 1
 }) => {
 
   x = x * scale
@@ -62,7 +63,7 @@ export default ({
 
   const fill = selected ? 'lightgray' : 'white'
 
-  return <g>
+  return <g key={id}>
     <rect
       key={id}
       x={x}
@@ -74,7 +75,10 @@ export default ({
         stroke: 'gray',
         fill
       }}
-      onMouseDown={() => r.send('nodeMouseDown', { id })}
+      onMouseDown={(e) => {
+        r.send('nodeMouseDown', { id })
+        e.stopPropagation()
+      }}
       onMouseUp={e => r.send('nodeMouseUp', e)}
     />
     {
@@ -110,3 +114,5 @@ export default ({
   </g>
 
 }
+
+export default Attach(Node)
