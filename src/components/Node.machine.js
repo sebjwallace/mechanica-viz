@@ -9,61 +9,60 @@ const schema = {
       initial: true
     },
     {
-      id: 'editNode'
+      id: 'selected.idle'
     },
     {
-      id: 'moveNode'
+      id: 'selected.move'
     },
     {
-      id: 'editNodeCP'
+      id: 'selected.moveCP'
     }
   ],
   transitions: [
     {
       event: 'nodeMouseDown',
       source: 'idle',
-      target: 'editNode',
-      method: 'selectNode'
-    },
-    {
-      event: 'graphMouseDown',
-      source: 'editNode',
-      target: 'idle',
-      method: 'deselectNode'
-    },
-    {
-      event: 'nodeMouseUp',
-      source: 'moveNode',
-      target: 'editNode'
+      target: 'selected.move',
+      method: 'select'
     },
     {
       event: 'mouseMove',
-      source: 'editNode',
-      target: 'moveNode',
-      method: 'moveNode'
-    },
-    {
-      event: 'mouseMove',
-      source: 'moveNode',
-      target: 'moveNode',
-      method: 'moveNode'
-    },
-    {
-      event: 'mouseDown',
-      source: 'idle',
-      target: 'editNodeCP',
-      method: 'selectNodeCP'
-    },
-    {
-      event: 'mouseMove',
-      source: 'editNodeCP',
-      target: 'editNodeCP',
-      method: 'moveNodeCP'
+      source: 'selected.move',
+      target: 'selected.move',
+      method: 'move'
     },
     {
       event: 'mouseUp',
-      source: 'editNodeCP',
-      target: 'idle'
+      source: 'selected.move',
+      target: 'selected.idle'
+    },
+    {
+      event: 'nodeMouseDown',
+      source: 'selected.idle',
+      target: 'selected.move'
+    },
+    {
+      event: 'graphMouseDown',
+      source: 'selected.idle',
+      target: 'idle',
+      method: 'deselect'
+    },
+    {
+      event: 'nodeCpMouseDown',
+      source: 'selected.idle',
+      target: 'selected.moveCP',
+      method: 'selectCP'
+    },
+    {
+      event: 'mouseMove',
+      source: 'selected.moveCP',
+      target: 'selected.moveCP',
+      method: 'moveCP'
+    },
+    {
+      event: 'mouseUp',
+      source: 'selected.moveCP',
+      target: 'selected.idle'
     }
   ],
   subscriptions: [
@@ -94,35 +93,34 @@ const schema = {
         destruct: data.id === payload.id
       }
     },
-    selectNode({ data }){
+    select({ data }){
       return {
         data: { ...data, selected: true }
       }
     },
-    deselectNode({ data }){
-      console.log('deselect')
+    deselect({ data }){
       return {
         data: { ...data, selected: false }
       }
     },
-    moveNode({ data, payload }){
+    move({ data, payload }){
       const { movementX, movementY } = payload
       const node = data
       node.x += movementX
       node.y += movementY
       return {
         data,
-        send: {
-          event: 'updateNode',
-          payload: data
-        }
+        // send: {
+        //   event: 'updateNode',
+        //   payload: data
+        // }
       }
     },
-    selectNodeCP({ data, payload }){
+    selectCP({ data, payload }){
       data.selectNodeCP = payload.position
       return { data }
     },
-    moveNodeCP({ data, payload }){
+    moveCP({ data, payload }){
       const { movementX, movementY } = payload
       const node = data
       if(data.selectNodeCP === 'TL'){

@@ -107,7 +107,10 @@ const Node = ({
         fill="gray"
         strokeWidth={1}
         stroke="gray"
-        onMouseDown={() => r.send('mouseDown', { position })}
+        onMouseDown={(e) => {
+          r.send('nodeCpMouseDown', { position })
+          e.stopPropagation()
+        }}
         onMouseUp={() => r.send('mouseUp')}
       />)
     }
