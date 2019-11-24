@@ -140,7 +140,11 @@ const schema = {
     {
       event: 'nodeMouseUp',
       source: 'selected.multiselect.junction',
-      target: 'selected.multiselect'
+      target: [
+        'isSelectable',
+        'idle.multiselect',
+        'selected.multiselect'
+      ]
     },
     {
       event: 'mouseMove',
