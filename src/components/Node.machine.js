@@ -156,7 +156,19 @@ const schema = {
       event: 'nodeMouseUp',
       source: 'selected.multiselect.move',
       target: 'selected.multiselect'
-    }
+    },
+
+    {
+      event: 'nodeMouseEnter',
+      source: 'idle',
+      target: 'selected.idle',
+      guard: 'isSelectable'
+    },
+    // {
+    //   event: 'nodeMouseLeave',
+    //   source: 'selected.idle',
+    //   target: 'idle'
+    // }
   ],
   subscriptions: [
     {

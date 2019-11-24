@@ -82,22 +82,23 @@ const Node = ({
         e.stopPropagation()
       }}
       onMouseUp={e => r.send({event: 'nodeMouseUp', payload: { ...e, id } })}
+      onMouseEnter={e => r.send({event: 'nodeMouseEnter', payload: { ...e, id } })}
+      onMouseLeave={e => r.send({event: 'nodeMouseLeave', payload: { ...e, id } })}
     />
     {
       selected && ports.map(({ x, y, i, side }) => <rect
         key={`port-${x}-${y}`}
         x={x}
         y={y}
-        width={portSize}
+        width={portSize*2}
         height={portSize}
         style={{
           strokeWidth: 1,
           stroke: 'gray',
           fill: 'white'
         }}
-        // onMouseDown={() => r.send('nodePortMouseDown', { i, side, x, y })}
-        // onMouseEnter={() => send('nodePortMouseEnter', { i, side, x, y })}
-        // onMouseLeave={() => () => send('nodePortMouseLeave', { i, side, x, y })}
+        onMouseDown={() => r.send({ event: 'portMouseDown', payload: { source: id, x, y } })}
+        onMouseEnter={() => r.send({ event: 'portMouseEnter', payload: { source: id, x, y } })}
       />)
     }
     {

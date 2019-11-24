@@ -3,8 +3,9 @@ import r from 'rithmic'
 import Attach from './Attach'
 
 import Node from './Node.js'
+import Edge from './Edge.js'
 
-const Graph = ({ nodes }) => {
+const Graph = ({ nodes, edges }) => {
 
   useEffect(() => {
     r.send({event: 'startGraph'})
@@ -32,6 +33,12 @@ const Graph = ({ nodes }) => {
         nodes && nodes.map((node) => <Node
           key={node.id}
           id={'node'+node.id}
+        />)
+      }
+      {
+        edges && edges.map(edge => <Edge
+          key={edge.id}
+          id={edge.id}
         />)
       }
     </svg>

@@ -20,6 +20,10 @@ const schema = {
     {
       event: 'updateNode',
       method: 'updateNode'
+    },
+    {
+      event: 'portMouseDown',
+      method: 'createEdge'
     }
   ],
   methods: {
@@ -55,34 +59,24 @@ const schema = {
         }
       }
     },
-    // addEdge({ data, payload: { nodeId, x, y } }){
-    //   data.edges.push({
-    //     source: nodeId,
-    //     points: [
-    //       { x, y },
-    //       { x, y }
-    //     ]
-    //   })
-    //   data.selectedEdge = data.edges.length
-    //   return {
-    //     data,
-    //     send: 'addedEdge'
-    //   }
-    // },
-    // editEdge({ data, payload }){
-    //   console.log('edit edge')
-    //   const edge = data.edges[data.selectedEdge]
-    //   const point = edge.points.length - 1
-    //   const prevPoint = point - 1
-    //   const dx = Math.abs(edge.points[prevPoint].x - edge.points[point].x)
-    //   const dy = Math.abs(edge.points[prevPoint].y - edge.points[point].y)
-    //   const axis = dx > dy ? 'x' : 'y'
-    //   edge[point][axis] = payload[axis]
-    //   return {
-    //     data,
-    //     send: 'editedEdge'
-    //   }
-    // },
+    createEdge({ data, payload: { source, x, y } }){
+      const edge = {
+        id: Math.random().toString(36).substring(2),
+        source,
+        points: [
+          { x, y },
+          { x, y }
+        ]
+      }
+      data.edges.push(edge)
+      return {
+        data,
+        send: [
+          { event: 'createdEdge', payload: edge },
+          { event: 'updatedGraph', payload: data }
+        ]
+      }
+    },
     // closeEdge({ data, payload: { nodeId } }){
     //   console.log('close edge')
     //   const edge = data.edges[data.selectedEdge]

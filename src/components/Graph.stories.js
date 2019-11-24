@@ -3,6 +3,7 @@ import Graph from './Graph'
 
 import './Graph.machine'
 import './Node.machine'
+import './Edge.machine'
 
 export default { title: 'Graph' }
 
