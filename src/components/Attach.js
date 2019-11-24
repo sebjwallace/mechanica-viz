@@ -7,18 +7,24 @@ export default (Component) => {
 
     constructor(props){
       super(props)
-      if(this.props.id){
+      if(props.id){
         this.machine = r.useMachine({
-          id: this.props.id,
-          ref: this.props.id
+          id: props.id,
+          tag: props.id
         })
       }
-      else if(this.props.create){
-        this.machine = r.create(this.props.create)
+      else if(props.create){
+        this.machine = r.create(props.create)
       }
-      this.state = this.machine.data
+      this.state = {
+        ...this.machine.data,
+        state: this.machine.getStates()
+      }
       this.machine.watch(() => {
-        this.setState({ ...this.machine.data })
+        this.setState({
+          ...this.machine.data,
+          state: this.machine.getStates()
+        })
         console.log(this.machine.state)
       })
     }

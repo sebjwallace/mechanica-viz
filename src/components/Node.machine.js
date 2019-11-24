@@ -2,6 +2,7 @@ import r from 'rithmic'
 
 const schema = {
   id: 'node',
+  tags: ['node'],
   data: {},
   states: [
     {
@@ -12,10 +13,25 @@ const schema = {
       id: 'selected.idle'
     },
     {
+      id: 'selected.junction'
+    },
+    {
       id: 'selected.move'
     },
     {
       id: 'selected.moveCP'
+    },
+    {
+      id: 'idle.multiselect'
+    },
+    {
+      id: 'selected.multiselect'
+    },
+    {
+      id: 'selected.multiselect.move'
+    },
+    {
+      id: 'selected.multiselect.junction'
     }
   ],
   transitions: [
@@ -23,7 +39,7 @@ const schema = {
       event: 'nodeMouseDown',
       source: 'idle',
       target: 'selected.move',
-      method: 'select'
+      guard: 'isSelectable'
     },
     {
       event: 'mouseMove',
@@ -39,13 +55,30 @@ const schema = {
     {
       event: 'nodeMouseDown',
       source: 'selected.idle',
-      target: 'selected.move'
+      target: 'selected.junction',
+      guard: 'isSelectable'
+    },
+    {
+      event: 'mouseMove',
+      source: 'selected.junction',
+      target: 'selected.move',
+      method: 'move'
+    },
+    {
+      event: 'nodeMouseUp',
+      source: 'selected.junction',
+      target: 'idle'
+    },
+    {
+      event: 'deselectAllNodes',
+      source: 'selected.idle',
+      target: 'idle',
+      guard: 'isDeselectable'
     },
     {
       event: 'graphMouseDown',
       source: 'selected.idle',
-      target: 'idle',
-      method: 'deselect'
+      target: 'idle'
     },
     {
       event: 'nodeCpMouseDown',
@@ -63,6 +96,62 @@ const schema = {
       event: 'mouseUp',
       source: 'selected.moveCP',
       target: 'selected.idle'
+    },
+
+    {
+      event: 'multiselectOn',
+      source: 'idle',
+      target: 'idle.multiselect'
+    },
+    {
+      event: 'multiselectOff',
+      source: 'idle.multiselect',
+      target: 'idle'
+    },
+    {
+      event: 'nodeMouseDown',
+      source: 'idle.multiselect',
+      target: 'selected.multiselect.move',
+      guard: 'isSelectable'
+    },
+
+    {
+      event: 'multiselectOn',
+      source: 'selected.idle',
+      target: 'selected.multiselect'
+    },
+    {
+      event: 'multiselectOff',
+      source: 'selected.multiselect',
+      target: 'selected.idle'
+    },
+    
+    {
+      event: 'nodeMouseDown',
+      source: 'selected.multiselect',
+      target: 'selected.multiselect.junction'
+    },
+    {
+      event: 'mouseMove',
+      source: 'selected.multiselect.junction',
+      target: 'selected.multiselect.move',
+      method: 'move'
+    },
+    {
+      event: 'nodeMouseUp',
+      source: 'selected.multiselect.junction',
+      target: 'selected.multiselect'
+    },
+    {
+      event: 'mouseMove',
+      source: 'selected.multiselect.move',
+      target: 'selected.multiselect.move',
+      method: 'move'
+    },
+    {
+      event: 'nodeMouseUp',
+      source: 'selected.multiselect.move',
+      target: 'selected.multiselect'
     }
   ],
   subscriptions: [
@@ -85,7 +174,7 @@ const schema = {
     constructor({ payload }){
       return {
         data: payload,
-        ref: 'node'+payload.id
+        addTag: 'node'+payload.id
       }
     },
     destructor({ data, payload }){
@@ -93,15 +182,11 @@ const schema = {
         destruct: data.id === payload.id
       }
     },
-    select({ data }){
-      return {
-        data: { ...data, selected: true }
-      }
+    isSelectable({ data, payload }){
+      return data.id === payload.id
     },
-    deselect({ data }){
-      return {
-        data: { ...data, selected: false }
-      }
+    isDeselectable({ data, payload }){
+      return data.id !== payload.id
     },
     move({ data, payload }){
       const { movementX, movementY } = payload
@@ -109,11 +194,7 @@ const schema = {
       node.x += movementX
       node.y += movementY
       return {
-        data,
-        // send: {
-        //   event: 'updateNode',
-        //   payload: data
-        // }
+        data
       }
     },
     selectCP({ data, payload }){

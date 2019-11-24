@@ -3,15 +3,13 @@ import r from 'rithmic'
 import Attach from './Attach'
 import { portPosition } from '../utils/positioning'
 
-const send = () => {}
-
 const Node = ({
+  state,
   id,
   x,
   y,
   width,
   height,
-  selected,
   scale = 1
 }) => {
 
@@ -61,6 +59,7 @@ const Node = ({
     }
   ]
 
+  const selected = state.selected
   const fill = selected ? 'lightgray' : 'white'
 
   return <g key={id}>
@@ -76,10 +75,13 @@ const Node = ({
         fill
       }}
       onMouseDown={(e) => {
-        r.send('nodeMouseDown', { id })
+        r.send([
+          !e.ctrlKey && { event: 'deselectAllNodes', payload: { id } },
+          { event: 'nodeMouseDown', payload: { ...e, id } }
+        ])
         e.stopPropagation()
       }}
-      onMouseUp={e => r.send('nodeMouseUp', e)}
+      onMouseUp={e => r.send({event: 'nodeMouseUp', payload: { ...e, id } })}
     />
     {
       selected && ports.map(({ x, y, i, side }) => <rect
@@ -93,9 +95,9 @@ const Node = ({
           stroke: 'gray',
           fill: 'white'
         }}
-        onMouseDown={() => r.send('nodePortMouseDown', { i, side, x, y })}
-        onMouseEnter={() => send('nodePortMouseEnter', { i, side, x, y })}
-        onMouseLeave={() => () => send('nodePortMouseLeave', { i, side, x, y })}
+        // onMouseDown={() => r.send('nodePortMouseDown', { i, side, x, y })}
+        // onMouseEnter={() => send('nodePortMouseEnter', { i, side, x, y })}
+        // onMouseLeave={() => () => send('nodePortMouseLeave', { i, side, x, y })}
       />)
     }
     {
@@ -108,10 +110,10 @@ const Node = ({
         strokeWidth={1}
         stroke="gray"
         onMouseDown={(e) => {
-          r.send('nodeCpMouseDown', { position })
+          r.send({event:'nodeCpMouseDown', payload: { position }})
           e.stopPropagation()
         }}
-        onMouseUp={() => r.send('mouseUp')}
+        onMouseUp={() => r.send({event: 'mouseUp'})}
       />)
     }
   </g>
