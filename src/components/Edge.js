@@ -5,23 +5,40 @@ import Attach from './Attach'
 
 const Edge = ({
   id,
+  state,
   points
 }) => {
 
-  const portSize = 5
-  const portRadius = portSize / 2
-
-  const path = `M ${points[0].x} ${points[0].y} ` + points.map(({ x, y }) => {
+  const path = `M ${points[0].x} ${points[0].y} ` + points.map(({ x, y }, i) => {
     return `${x} ${y} `
   }).join('L')
 
-  return <g key={path}>
+  return <g
+    key={path}
+    pointerEvents="none"
+  >
+    <defs>
+      <marker
+        id="head"
+        orient="auto"
+        markerWidth="3"
+        markerHeight="6"
+        refX="4"
+        refY="3"
+      >
+        <path
+          d="M0,0 V6 L3,3 Z"
+          fill="gray"
+        />
+      </marker>
+    </defs>    
     <path
-      d={path}
-      strokeWidth={2}
-      stroke="gray"
+      markerEnd="url(#head)"
+      strokeWidth="2"
       fill="none"
-    />
+      stroke="gray"  
+      d={path}
+    /> 
   </g>
 
 }

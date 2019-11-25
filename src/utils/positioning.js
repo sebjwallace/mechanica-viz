@@ -31,3 +31,38 @@ export const portPosition = ({ side, ...args }) => ({
   left: leftPortPosition,
   right: rightPortPosition
 }[side](args))
+
+export const topPortPaddingPosition = ({ x, y, width, i }) => ({
+  x: x + (i * (width / 5)),
+  y: y - 40,
+  width: width / 5,
+  height: 40
+})
+
+export const bottomPortPaddingPosition = ({ x, y, i, width, height }) => ({
+  x: x + (i * (width / 5)),
+  y: y + height,
+  width: width / 5,
+  height: 40
+})
+
+export const leftPortPaddingPosition = ({ x, y, height, i }) => ({
+  x: x - 40,
+  y: y + (height / 3) * i,
+  width: 40,
+  height: height / 3
+})
+
+export const rightPortPaddingPosition = ({ x, y, i, width, height }) => ({
+  x: x + width,
+  y: y + (height / 3) * i,
+  width: 40,
+  height: height / 3
+})
+
+export const portPaddingPosition = ({ side, ...args }) => ({
+  top: topPortPaddingPosition,
+  bottom: bottomPortPaddingPosition,
+  left: leftPortPaddingPosition,
+  right: rightPortPaddingPosition
+}[side](args))

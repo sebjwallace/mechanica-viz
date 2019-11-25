@@ -6,8 +6,28 @@ const schema = {
     nodes: [],
     edges: []
   },
-  states: [],
-  transitions: [],
+  states: [
+    {
+      id: 'idle',
+      initial: true
+    },
+    {
+      id: 'drawEdge'
+    }
+  ],
+  transitions: [
+    {
+      event: 'portMouseDown',
+      source: 'idle',
+      target: 'drawEdge',
+      method: 'createEdge'
+    },
+    {
+      event: 'portMouseDown',
+      source: 'drawEdge',
+      target: 'idle'
+    }
+  ],
   subscriptions: [
     {
       event: 'startGraph',
@@ -20,10 +40,6 @@ const schema = {
     {
       event: 'updateNode',
       method: 'updateNode'
-    },
-    {
-      event: 'portMouseDown',
-      method: 'createEdge'
     }
   ],
   methods: {
@@ -64,7 +80,6 @@ const schema = {
         id: Math.random().toString(36).substring(2),
         source,
         points: [
-          { x, y },
           { x, y }
         ]
       }
@@ -76,27 +91,7 @@ const schema = {
           { event: 'updatedGraph', payload: data }
         ]
       }
-    },
-    // closeEdge({ data, payload: { nodeId } }){
-    //   console.log('close edge')
-    //   const edge = data.edges[data.selectedEdge]
-    //   edge.target = nodeId
-    //   return {
-    //     data,
-    //     send: 'closedEdge'
-    //   }
-    // },
-    // snapEdge({ data, payload }){
-    //   console.log('snap tqa')
-    //   const { panel } = payload
-    //   const edge = data.edges[data.selectedEdge]
-    //   const axis = panel === 'top' || panel === 'bottom' ? 'y' : 'x'
-    //   edge.points[edge.points.length - 1][axis] = payload[axis]
-    //   edge.points[edge.points.length - 2][axis] = payload[axis]
-    //   return {
-    //     data
-    //   }
-    // }
+    }
   }
 }
 

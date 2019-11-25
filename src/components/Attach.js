@@ -25,7 +25,7 @@ export default (Component) => {
           ...this.machine.data,
           state: this.machine.getStates()
         })
-        console.log(this.machine.state)
+        // console.log(this.machine.state)
       })
     }
 

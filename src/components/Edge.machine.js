@@ -19,10 +19,22 @@ const schema = {
       method: 'move'
     },
     {
+      event: 'portMouseEnter',
+      source: 'move',
+      target: 'move',
+      method: 'snap'
+    },
+    {
       event: 'mouseUp',
       source: 'move',
       target: 'move',
       method: 'createPoint'
+    },
+    {
+      event: 'portMouseDown',
+      source: 'move',
+      target: 'idle',
+      method: 'snap'
     }
   ],
   subscriptions: [
@@ -30,10 +42,6 @@ const schema = {
       event: 'createdEdge',
       method: 'constructor',
       create: true
-    },
-    {
-      event: 'portMouseEnter',
-      method: 'snap'
     }
   ],
   methods: {
@@ -58,6 +66,10 @@ const schema = {
       }
     },
     snap({ data, payload }){
+      const { points } = data
+      if(points.length <= 2) return { data }
+      const isSameSource = data.source === payload.source
+      if(points.length <= 3 && isSameSource) return { data }
       const { x, y } = payload
       const point = data.points[data.points.length-1]
       const prevPoint = data.points[data.points.length-2]
