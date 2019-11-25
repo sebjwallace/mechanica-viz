@@ -156,19 +156,7 @@ const schema = {
       event: 'nodeMouseUp',
       source: 'selected.multiselect.move',
       target: 'selected.multiselect'
-    },
-
-    {
-      event: 'nodeMouseEnter',
-      source: 'idle',
-      target: 'selected.idle',
-      guard: 'isSelectable'
-    },
-    // {
-    //   event: 'nodeMouseLeave',
-    //   source: 'selected.idle',
-    //   target: 'idle'
-    // }
+    }
   ],
   subscriptions: [
     {
@@ -210,7 +198,11 @@ const schema = {
       node.x += movementX
       node.y += movementY
       return {
-        data
+        data,
+        send: {
+          event: 'updatedNode',
+          payload: data
+        }
       }
     },
     selectCP({ data, payload }){

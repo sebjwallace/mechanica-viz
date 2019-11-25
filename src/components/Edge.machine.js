@@ -19,22 +19,16 @@ const schema = {
       method: 'move'
     },
     {
-      event: 'portMouseEnter',
-      source: 'move',
-      target: 'move',
-      method: 'snap'
-    },
-    {
-      event: 'mouseUp',
+      event: 'graphMouseDown',
       source: 'move',
       target: 'move',
       method: 'createPoint'
     },
     {
-      event: 'portMouseDown',
+      event: 'closeEdge',
       source: 'move',
       target: 'idle',
-      method: 'snap'
+      method: 'close'
     }
   ],
   subscriptions: [
@@ -42,6 +36,10 @@ const schema = {
       event: 'createdEdge',
       method: 'constructor',
       create: true
+    },
+    {
+      event: 'updatedNode',
+      method: 'snap'
     }
   ],
   methods: {
@@ -66,19 +64,37 @@ const schema = {
       }
     },
     snap({ data, payload }){
-      const { points } = data
-      if(points.length <= 2) return { data }
-      const isSameSource = data.source === payload.source
-      if(points.length <= 3 && isSameSource) return { data }
+      const isSource = payload.id === data.source.id
+      const isTarget = payload.id === data.target.id
+      if(!isSource && !isTarget) return
       const { x, y } = payload
-      const point = data.points[data.points.length-1]
-      const prevPoint = data.points[data.points.length-2]
-      const dx = Math.abs(prevPoint.x - x)
-      const dy = Math.abs(prevPoint.y - y)
-      if(dy < dx) point.y = prevPoint.y = y
-      if(dx < dy) point.x = prevPoint.x = x
+      if(isSource){
+        const point = data.points[1]
+        const prevPoint = data.points[0]
+        const isVert = prevPoint.x === point.x
+        const isHorz = prevPoint.y === point.y
+        if(isVert) point.x = x + data.sourceDx
+        if(isHorz) point.y = y + data.sourceDy
+        prevPoint.y = y + data.sourceDy
+        prevPoint.x = x + data.sourceDx
+      }
+      if(isTarget) {
+        const point = data.points[data.points.length - 1]
+        const prevPoint = data.points[data.points.length - 2]
+        const isVert = prevPoint.x === point.x
+        const isHorz = prevPoint.y === point.y
+        if(isVert) prevPoint.x = x + data.targetDx
+        if(isHorz) prevPoint.y = y + data.targetDy
+        point.y = y + data.targetDy
+        point.x = x + data.targetDx
+      }
       return {
         data
+      }
+    },
+    close({ data, payload }){
+      return {
+        data: { ...data, ...payload }
       }
     },
     createPoint({ data, payload }){

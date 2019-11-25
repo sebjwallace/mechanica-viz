@@ -17,15 +17,16 @@ const schema = {
   ],
   transitions: [
     {
-      event: 'portMouseDown',
+      event: 'interfaceMouseDown',
       source: 'idle',
       target: 'drawEdge',
       method: 'createEdge'
     },
     {
-      event: 'portMouseDown',
+      event: 'interfaceMouseDown',
       source: 'drawEdge',
-      target: 'idle'
+      target: 'idle',
+      method: 'closeEdge'
     }
   ],
   subscriptions: [
@@ -75,11 +76,18 @@ const schema = {
         }
       }
     },
-    createEdge({ data, payload: { source, x, y } }){
+    createEdge({ data, payload: { id, nativeEvent } }){
+      const node = data.nodes.find(node => node.id === id)
+      const { offsetX: x, offsetY: y } = nativeEvent
+      const dx = x - node.x
+      const dy = y - node.y
       const edge = {
         id: Math.random().toString(36).substring(2),
-        source,
+        source: node,
+        sourceDx: dx,
+        sourceDy: dy,
         points: [
+          { x, y },
           { x, y }
         ]
       }
@@ -90,6 +98,18 @@ const schema = {
           { event: 'createdEdge', payload: edge },
           { event: 'updatedGraph', payload: data }
         ]
+      }
+    },
+    closeEdge({ data, payload: { id, nativeEvent } }){
+      const node = data.nodes.find(node => node.id === id)
+      const { offsetX: x, offsetY: y } = nativeEvent
+      const targetDx = x - node.x
+      const targetDy = y - node.y
+      return {
+        send: {
+          event: 'closeEdge',
+          payload: { target: node, targetDx, targetDy }
+        }
       }
     }
   }
