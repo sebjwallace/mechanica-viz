@@ -235,7 +235,7 @@ const schema = {
       return {
         data,
         send: {
-          event: 'updateGraph',
+          event: 'updatedNode',
           payload: data
         }
       }

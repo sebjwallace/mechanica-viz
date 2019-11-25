@@ -67,26 +67,30 @@ const schema = {
       const isSource = payload.id === data.source.id
       const isTarget = payload.id === data.target.id
       if(!isSource && !isTarget) return
-      const { x, y } = payload
+      const { x, y, width, height } = payload
       if(isSource){
+        const offsetX = x + (width * data.sourceRatioX)
+        const offsetY = y + (height * data.sourceRatioY)
         const point = data.points[1]
         const prevPoint = data.points[0]
         const isVert = prevPoint.x === point.x
         const isHorz = prevPoint.y === point.y
-        if(isVert) point.x = x + data.sourceDx
-        if(isHorz) point.y = y + data.sourceDy
-        prevPoint.y = y + data.sourceDy
-        prevPoint.x = x + data.sourceDx
+        if(isVert) point.x = offsetX
+        if(isHorz) point.y = offsetY
+        prevPoint.x = offsetX
+        prevPoint.y = offsetY
       }
       if(isTarget) {
+        const offsetX = x + (width * data.targetRatioX)
+        const offsetY = y + (height * data.targetRatioY)
         const point = data.points[data.points.length - 1]
         const prevPoint = data.points[data.points.length - 2]
         const isVert = prevPoint.x === point.x
         const isHorz = prevPoint.y === point.y
-        if(isVert) prevPoint.x = x + data.targetDx
-        if(isHorz) prevPoint.y = y + data.targetDy
-        point.y = y + data.targetDy
-        point.x = x + data.targetDx
+        if(isVert) prevPoint.x = offsetX
+        if(isHorz) prevPoint.y = offsetY
+        point.x = offsetX
+        point.y = offsetY
       }
       return {
         data

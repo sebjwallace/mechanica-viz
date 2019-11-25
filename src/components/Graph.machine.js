@@ -79,13 +79,13 @@ const schema = {
     createEdge({ data, payload: { id, nativeEvent } }){
       const node = data.nodes.find(node => node.id === id)
       const { offsetX: x, offsetY: y } = nativeEvent
-      const dx = x - node.x
-      const dy = y - node.y
+      const sourceRatioX = (x - node.x) / node.width
+      const sourceRatioY = (y - node.y) / node.height
       const edge = {
         id: Math.random().toString(36).substring(2),
         source: node,
-        sourceDx: dx,
-        sourceDy: dy,
+        sourceRatioX,
+        sourceRatioY,
         points: [
           { x, y },
           { x, y }
@@ -103,12 +103,12 @@ const schema = {
     closeEdge({ data, payload: { id, nativeEvent } }){
       const node = data.nodes.find(node => node.id === id)
       const { offsetX: x, offsetY: y } = nativeEvent
-      const targetDx = x - node.x
-      const targetDy = y - node.y
+      const targetRatioX = (x - node.x) / node.width
+      const targetRatioY = (y - node.y) / node.height
       return {
         send: {
           event: 'closeEdge',
-          payload: { target: node, targetDx, targetDy }
+          payload: { target: node, targetRatioX, targetRatioY }
         }
       }
     }

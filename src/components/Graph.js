@@ -17,6 +17,7 @@ const Graph = ({ nodes, edges }) => {
     tabIndex="0"
     onKeyDown={(e) => {
       r.send(e.ctrlKey && {event: 'multiselectOn'})
+      r.send(e.keyCode === 27 && {event: 'esc'})
     }}
     onKeyUp={(e) => {
       r.send({event: 'multiselectOff'})
