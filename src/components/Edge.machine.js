@@ -9,6 +9,9 @@ const schema = {
     {
       id: 'move',
       initial: true
+    },
+    {
+      id: 'edit'
     }
   ],
   transitions: [
@@ -29,6 +32,24 @@ const schema = {
       source: 'move',
       target: 'idle',
       method: 'close'
+    },
+    {
+      event: 'edgeMouseDown',
+      source: 'idle',
+      target: 'edit',
+      method: 'edit',
+      guard: 'isSelectable'
+    },
+    {
+      event: 'mouseMove',
+      source: 'edit',
+      target: 'edit',
+      method: 'edit'
+    },
+    {
+      event: 'mouseUp',
+      source: 'edit',
+      target: 'idle'
     }
   ],
   subscriptions: [
@@ -48,6 +69,9 @@ const schema = {
         data: payload,
         addTag: payload.id
       }
+    },
+    isSelectable({ data, payload }){
+      return data.id === payload.id
     },
     move({ data, payload }){
       const {
@@ -99,6 +123,19 @@ const schema = {
     close({ data, payload }){
       return {
         data: { ...data, ...payload }
+      }
+    },
+    edit({ data, payload }){
+      data.selectedPoint = payload.selectedPoint || data.selectedPoint
+      const { nativeEvent: { offsetX, offsetY } } = payload
+      const point = data.points[data.selectedPoint]
+      const prevPoint = data.points[data.selectedPoint - 1]
+      const isVert = prevPoint.x === point.x
+      const isHorz = prevPoint.y === point.y
+      if(isVert) point.x = prevPoint.x = offsetX
+      if(isHorz) point.y = prevPoint.y = offsetY
+      return {
+        data
       }
     },
     createPoint({ data, payload }){

@@ -2,6 +2,7 @@ import React from 'react'
 import r from 'rithmic'
 
 import Attach from './Attach'
+import './Edge.scss'
 
 const Edge = ({
   id,
@@ -15,7 +16,8 @@ const Edge = ({
 
   return <g
     key={path}
-    pointerEvents="none"
+    pointerEvents={state.idle ? 'stroke' : 'none'}
+    className="Edge"
   >
     <defs>
       <marker
@@ -38,7 +40,24 @@ const Edge = ({
       fill="none"
       stroke="gray"  
       d={path}
-    /> 
+    />
+    {
+      points.map(({ x, y }, i) => {
+        if(i === 0) return
+        return <line
+          x1={points[i-1].x}
+          y1={points[i-1].y}
+          x2={x}
+          y2={y}
+          stroke="transparent"
+          strokeWidth={5}
+          onMouseDown={e => r.send({
+            event: 'edgeMouseDown',
+            payload: { ...e, selectedPoint: i, id }
+          })}
+        />
+      })
+    }
   </g>
 
 }
