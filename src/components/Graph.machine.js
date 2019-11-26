@@ -66,7 +66,14 @@ const schema = {
         }
       }
     },
-    createNode({ data, payload: node }){
+    createNode({ data }){
+      const node = {
+        id: data.nodes.length,
+        x: 0,
+        y: 0,
+        width: 50,
+        height: 50
+      }
       data.nodes.push(node)
       return {
         data,

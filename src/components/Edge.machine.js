@@ -122,18 +122,34 @@ const schema = {
     },
     close({ data, payload }){
       return {
-        data: { ...data, ...payload }
+        data: { ...data, ...payload },
+        send: {
+          event: 'closedEdge',
+          payload: {
+            source: data.source,
+            target: payload.target
+          }
+        }
       }
     },
     edit({ data, payload }){
       data.selectedPoint = payload.selectedPoint || data.selectedPoint
       const { nativeEvent: { offsetX, offsetY } } = payload
-      const point = data.points[data.selectedPoint]
-      const prevPoint = data.points[data.selectedPoint - 1]
+
+      const { selectedPoint } = data
+      const point = data.points[selectedPoint]
+      const prevPoint = data.points[selectedPoint - 1]
       const isVert = prevPoint.x === point.x
       const isHorz = prevPoint.y === point.y
       if(isVert) point.x = prevPoint.x = offsetX
       if(isHorz) point.y = prevPoint.y = offsetY
+
+      const isStart = selectedPoint === 1
+      const endPoint = isStart ? prevPoint : point
+      const node = isStart ? 'source' : 'target'
+      data[node+'RatioX'] = (endPoint.x - data[node].x) / data[node].width
+      data[node+'RatioY'] = (endPoint.y - data[node].y) / data[node].height
+
       return {
         data
       }

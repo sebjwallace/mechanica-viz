@@ -9,8 +9,7 @@ const Graph = ({ nodes, edges }) => {
 
   useEffect(() => {
     r.send({event: 'startGraph'})
-    r.send({event: 'createNode', payload: { id: 1, x: 0, y: 0, width: 50, height: 50 }})
-    r.send({event: 'createNode', payload: { id: 2, x: 100, y: 100, width: 100, height: 100 }})
+    r.send({event: 'createNode'})
   }, [])
 
   return <div
