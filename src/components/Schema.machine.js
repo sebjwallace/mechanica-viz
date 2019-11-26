@@ -1,14 +1,38 @@
 import r from 'rithmic'
 
-r.create({
+r.register({
   id: 'schema',
   data: {
-    id: 'test',
-    states: [],
-    transitions: []
+    schema: {
+      id: 'test',
+      states: [],
+      transitions: []
+    },
+    selectedNode: null
   },
-  states: [],
-  transitions: [],
+  states: [
+    {
+      id: 'idle',
+      initial: true
+    },
+    {
+      id: 'viewNode'
+    }
+  ],
+  transitions: [
+    {
+      event: 'nodeMouseDown',
+      source: 'idle',
+      target: 'viewNode',
+      method: 'selectNode'
+    },
+    {
+      event: 'nodeMouseDown',
+      source: 'viewNode',
+      target: 'viewNode',
+      method: 'selectNode'
+    }
+  ],
   subscriptions: [
     {
       event: 'createdNode',
@@ -17,11 +41,15 @@ r.create({
     {
       event: 'closedEdge',
       method: 'createTransition'
+    },
+    {
+      event: 'changeNodeId',
+      method: 'changeNodeId'
     }
   ],
   methods: {
     createState({ data, payload }){
-      data.states.push({
+      data.schema.states.push({
         id: payload.id,
       })
       return {
@@ -29,12 +57,24 @@ r.create({
       }
     },
     createTransition({ data, payload }){
-      data.transitions.push({
+      data.schema.transitions.push({
         event: '',
         source: payload.source.id,
         target: payload.target.id
       })
-      console.log(data)
+      return {
+        data
+      }
+    },
+    selectNode({ data, payload }){
+      console.log(payload)
+      data.selectedNode = data.schema.states.find(({id}) => id === payload.id)
+      return {
+        data
+      }
+    },
+    changeNodeId({ data, payload }){
+      data.selectedNode.id = payload
       return {
         data
       }

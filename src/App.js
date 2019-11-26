@@ -3,6 +3,7 @@ import r from 'rithmic'
 
 import Graph from './components/Graph'
 import ToolPanel from './components/ToolPanel'
+import PropertiesPanel from './components/PropertiesPanel'
 
 import './components/Graph.machine'
 import './components/Node.machine'
@@ -19,6 +20,7 @@ class App extends React.Component {
       <div className="App">
         <ToolPanel />
         <Graph create="graph"/>
+        <PropertiesPanel create="schema" />
       </div>
     )
 
