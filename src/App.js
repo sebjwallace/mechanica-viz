@@ -1,14 +1,10 @@
 import React from 'react'
 import r from 'rithmic'
 
-import Graph from './components/Graph'
-import ToolPanel from './components/ToolPanel'
-import PropertiesPanel from './components/PropertiesPanel'
+import './components/State.machine'
+import './components/Model.machine'
 
-import './components/Graph.machine'
-import './components/Node.machine'
-import './components/Edge.machine'
-import './components/Schema.machine'
+import Canvas from './components/Canvas'
 
 class App extends React.Component {
 
@@ -18,9 +14,7 @@ class App extends React.Component {
 
     return (
       <div className="App">
-        <ToolPanel />
-        <Graph create="graph"/>
-        <PropertiesPanel create="schema" />
+        <Canvas />
       </div>
     )
 
