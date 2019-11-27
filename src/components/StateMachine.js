@@ -10,10 +10,10 @@ const StateMachine = ({
   
   return <g>
     {
-      states.map(state => <State { ...state } />)
+      states.map((state, i) => <State { ...state } index={i} />)
     }
     {
-      transitions.map(transition => <Transition { ...transition } />)
+      transitions.map((transition, i) => <Transition { ...transition } id={i} />)
     }
   </g>
 

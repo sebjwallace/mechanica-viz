@@ -18,16 +18,27 @@ class Canvas extends React.Component {
 
     return <div
       tabIndex="0"
+      onKeyDown={(e) => {
+        r.send(e.ctrlKey && {event: 'multiselectOn'})
+        r.send(e.keyCode === 27 && {event: 'esc'})
+      }}
+      onKeyUp={(e) => {
+        r.send({event: 'multiselectOff'})
+      }}
     >
       <svg
         width="500"
         height="500"
-        onMouseMove={e => r.send({
-          event: 'mouseMove',
+        onMouseDown={e => r.send({
+          event: 'mouseDown',
           payload: e
         })}
         onMouseUp={e => r.send({
           event: 'mouseUp',
+          payload: e
+        })}
+        onMouseMove={e => r.send({
+          event: 'mouseMove',
           payload: e
         })}
       >

@@ -2,6 +2,7 @@ import React from 'react'
 import r from 'rithmic'
 
 import './components/State.machine'
+import './components/Transition.machine'
 import './components/Model.machine'
 
 import Canvas from './components/Canvas'
