@@ -5,7 +5,7 @@ const ToolPanel = ({}) => {
 
   return <div className="ToolPanel">
     <button
-      onClick={e => r.send({event: 'createNode'})}
+      onClick={e => r.send({event: 'createState'})}
     >
       N
     </button>

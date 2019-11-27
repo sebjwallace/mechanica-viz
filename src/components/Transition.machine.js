@@ -78,7 +78,7 @@ const schema = {
       const {
         nativeEvent: { offsetX: x, offsetY: y }
       } = payload
-      const points = data.model.transitions[data.id].view.points
+      const points = data.model.schema.transitions[data.id].view.points
       const point = points[points.length-1]
       const prevPoint = points[points.length-2]
       const dx = Math.abs(prevPoint.x - x)
@@ -90,11 +90,11 @@ const schema = {
       }
     },
     snap({ data, payload }){
-      const transition = data.model.transitions[data.id].view
+      const transition = data.model.schema.transitions[data.id].view
       const isSource = payload.id === transition.source.index
       const isTarget = payload.id === transition.target.index
       if(!isSource && !isTarget) return
-      const { x, y, width, height } = data.model.states[payload.id].view
+      const { x, y, width, height } = data.model.schema.states[payload.id].view
       const { points } = transition
       if(isSource){
         const offsetX = x + (width * transition.source.ratioX)
@@ -131,7 +131,7 @@ const schema = {
       const { nativeEvent: { offsetX, offsetY } } = payload
       data.selectedPoint = payload.selectedPoint || data.selectedPoint
 
-      const transition = data.model.transitions[data.id].view
+      const transition = data.model.schema.transitions[data.id].view
       const points = transition.points
       const point = points[data.selectedPoint]
       const prevPoint = points[data.selectedPoint - 1]
@@ -141,12 +141,11 @@ const schema = {
       if(isHorz) point.y = prevPoint.y = offsetY
 
       const isInterpoint = data.selectedPoint > 1 && data.selectedPoint < points.length - 1
-      console.log(isInterpoint)
       if(!isInterpoint){
         const isStart = data.selectedPoint === 1
         const endPoint = isStart ? prevPoint : point
         const type = isStart ? 'source' : 'target'
-        const node = data.model.states[transition[type].index].view
+        const node = data.model.schema.states[transition[type].index].view
         transition[type].ratioX = (endPoint.x - node.x) / node.width
         transition[type].ratioY = (endPoint.y - node.y) / node.height
       }
@@ -160,7 +159,7 @@ const schema = {
       }
     },
     createPoint({ data, payload }){
-      const points = data.model.transitions[data.id].view.points
+      const points = data.model.schema.transitions[data.id].view.points
       points.push({
         x: payload.nativeEvent.offsetX,
         y: payload.nativeEvent.offsetY

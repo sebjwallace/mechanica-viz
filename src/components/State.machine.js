@@ -89,7 +89,7 @@ export default r.register({
     },
     move({ data, payload }){
       const { movementX, movementY } = payload
-      const state = data.model.states[data.index]
+      const state = data.model.schema.states[data.index]
       state.view.x += movementX
       state.view.y += movementY
       return {
@@ -111,7 +111,7 @@ export default r.register({
     },
     moveCP({ data, payload }){
       const { movementX, movementY } = payload
-      const view = data.model.states[data.index]
+      const { view } = data.model.schema.states[data.index]
       if(data.selectedCp === 'TL'){
         view.x += movementX
         view.y += movementY

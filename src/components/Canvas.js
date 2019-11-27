@@ -9,9 +9,9 @@ class Canvas extends React.Component {
     super(props)
     this.controller = r.useMachine({ id: 'model' })
     this.controller.watch(() => this.setState({
-      model: this.controller.data
+      model: this.controller.data.schema
     }))
-    this.state = { model: this.controller.data }
+    this.state = { model: this.controller.data.schema }
   }
 
   render(){

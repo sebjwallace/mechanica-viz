@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import r from 'rithmic'
 
+import { calcTextWidth } from '../utils/svg.util'
 import './State.scss'
 
 const State = ({ id, index, view }) => {
@@ -50,12 +51,15 @@ const State = ({ id, index, view }) => {
     })
   }
 
+  const textWidth = calcTextWidth(id)
+
   return <g
     key={id}
     className="State"
     onMouseDown={e => {
       r.send(!e.ctrlKey && { event: 'deselectAllNodes' })
       controller.receive({ event: 'stateMouseDown' })
+      r.send({ event: 'selectState', payload: { index } })
       e.stopPropagation()
     }}
     onMouseUp={e => controller.receive({ event: 'stateMouseUp' })}
@@ -70,8 +74,8 @@ const State = ({ id, index, view }) => {
       strokeWidth={2}
     />
     <text
-      x={x+width/2}
-      y={y+height/2}  
+      x={x+width/2-textWidth/2}
+      y={y+height/2+4}
     >
       { id }
     </text>
@@ -117,7 +121,7 @@ const State = ({ id, index, view }) => {
         strokeWidth={1}
         stroke="gray"
         onMouseDown={(e) => {
-          r.send({event:'stateCpMouseDown', payload: { position }})
+          controller.receive({event:'stateCpMouseDown', payload: { position }})
           e.stopPropagation()
         }}
         onMouseUp={() => r.send({event: 'mouseUp'})}

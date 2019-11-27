@@ -43,7 +43,7 @@ const Transition = ({
       </marker>
     </defs>    
     <path
-      markerEnd="url(#head)"
+      markerEnd={state.idle && "url(#head)"}
       strokeWidth="2"
       fill="none"
       stroke="gray"  

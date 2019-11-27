@@ -4,8 +4,11 @@ import r from 'rithmic'
 import './components/State.machine'
 import './components/Transition.machine'
 import './components/Model.machine'
+import './components/PropertiesPanel.machine'
 
 import Canvas from './components/Canvas'
+import ToolPanel from './components/ToolPanel'
+import PropertiesPanel from './components/PropertiesPanel'
 
 class App extends React.Component {
 
@@ -15,7 +18,9 @@ class App extends React.Component {
 
     return (
       <div className="App">
+        <ToolPanel />
         <Canvas />
+        <PropertiesPanel />
       </div>
     )
 
