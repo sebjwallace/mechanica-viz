@@ -134,10 +134,16 @@ export default r.register({
       }
       return {
         data,
-        send: {
-          event: 'updateModel',
-          payload: data.model
-        }
+        send: [
+          {
+            event: 'updateModel',
+            payload: data.model
+          },
+          {
+            event: 'updatedState',
+            payload: { id: data.index }
+          }
+        ]
       }
     }
   }

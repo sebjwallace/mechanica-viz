@@ -13,11 +13,12 @@ const PropertiesPanel = ({}) => {
 
   if(!data) return ''
 
-  const { selectedState } = data
+  const { selectedState, selectedTransition } = data
+  const state = controller.getStates()
 
   return <div>
     {
-      selectedState && <div>
+      state.editState && <div>
         <label>
           Id
           <input
@@ -26,6 +27,21 @@ const PropertiesPanel = ({}) => {
             onChange={e => controller.receive({
               event: 'updateStateId',
               payload: { id: e.target.value }
+            })}
+          />
+        </label>
+      </div>
+    }
+    {
+      state.editTransition && <div>
+        <label>
+          Event
+          <input
+            type="text"
+            value={selectedTransition.event}
+            onChange={e => controller.receive({
+              event: 'updateTransitionEvent',
+              payload: { event: e.target.value }
             })}
           />
         </label>

@@ -3,27 +3,68 @@ import r from 'rithmic'
 export default r.register({
   id: 'propertiesPanel',
   data: {
-    selectedState: null
+    selectedState: null,
+    selectedTransition: null
   },
   states: [
-    { id: 'idle', initial: true }
+    { id: 'idle', initial: true },
+    { id: 'editState' },
+    { id: 'editTransition' }
   ],
   transitions: [
     {
-      event: 'updateStateId',
+      event: 'selectState',
+      source: 'editState',
+      target: 'editState',
+      method: 'selectState'
+    },
+    {
+      event: 'selectState',
       source: 'idle',
-      target: 'idle',
+      target: 'editState',
+      method: 'selectState'
+    },
+    {
+      event: 'selectTransition',
+      source: 'idle',
+      target: 'editTransition',
+      method: 'selectTransition'
+    },
+    {
+      event: 'selectTransition',
+      source: 'editTransition',
+      target: 'editTransition',
+      method: 'selectTransition'
+    },
+    {
+      event: 'selectTransition',
+      source: 'editState',
+      target: 'editTransition',
+      method: 'selectTransition'
+    },
+    {
+      event: 'selectState',
+      source: 'editTransition',
+      target: 'editState',
+      method: 'selectState'
+    },
+    {
+      event: 'updateStateId',
+      source: 'editState',
+      target: 'editState',
       method: 'updateStateId'
+    },
+    {
+      event: 'updateTransitionEvent',
+      source: 'editTransition',
+      target: 'editTransition',
+      method: 'editTransitionEvent'
     }
   ],
   subscriptions: [
     {
       event: 'updatedModel',
       method: 'update'
-    },
-    {
-      event: 'selectState',
-      method: 'selectState'
     }
   ],
   methods: {
@@ -48,9 +89,28 @@ export default r.register({
         data
       }
     },
+    selectTransition({ data, payload }){
+      const transition = data.model.schema.transitions[payload.index]
+      console.log(transition)
+      data.selectedTransitionIndex = payload.index
+      data.selectedTransition = transition
+      return {
+        data
+      }
+    },
     updateStateId({ data, payload }){
       const state = data.model.schema.states[data.selectedStateIndex]
       state.id = payload.id
+      return {
+        send: {
+          event: 'updateModel',
+          payload: data.model
+        }
+      }
+    },
+    editTransitionEvent({ data, payload }){
+      const transition = data.model.schema.transitions[data.selectedTransitionIndex]
+      transition.event = payload.event
       return {
         send: {
           event: 'updateModel',
