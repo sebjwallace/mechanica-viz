@@ -9,6 +9,16 @@ const ToolPanel = ({}) => {
     >
       N
     </button>
+    <button
+      onClick={e => r.send({event: 'startPlayer'})}
+    >
+      Start
+    </button>
+    <button
+      onClick={e => r.send({event: 'stopPlayer'})}
+    >
+      Stop
+    </button>
   </div>
 
 }

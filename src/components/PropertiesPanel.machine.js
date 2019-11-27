@@ -91,7 +91,6 @@ export default r.register({
     },
     selectTransition({ data, payload }){
       const transition = data.model.schema.transitions[payload.index]
-      console.log(transition)
       data.selectedTransitionIndex = payload.index
       data.selectedTransition = transition
       return {
@@ -99,6 +98,10 @@ export default r.register({
       }
     },
     updateStateId({ data, payload }){
+      data.model.schema.transitions.forEach(transition => {
+        if(transition.source === data.selectedState.id) transition.source = payload.id
+        if(transition.target === data.selectedState.id) transition.target = payload.id
+      })
       const state = data.model.schema.states[data.selectedStateIndex]
       state.id = payload.id
       return {

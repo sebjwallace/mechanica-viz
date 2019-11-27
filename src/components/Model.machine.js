@@ -5,8 +5,10 @@ r.create({
   data: {
     id: 'test',
     schema: {
+      id: 'test',
       states: [],
-      transitions: []
+      transitions: [],
+      methods: {}
     }
   },
   states: [
@@ -56,6 +58,7 @@ r.create({
     createState({ data }){
       const state = {
         id: '',
+        initial: !data.schema.states.length,
         view: {
           x: 0,
           y: 0,
@@ -79,7 +82,7 @@ r.create({
       const ratioY = (y - state.view.y) / state.view.height
       const transition = {
         event: '',
-        source: '',
+        source: state.id,
         target: '',
         view: {
           source: {
@@ -102,6 +105,7 @@ r.create({
     closeTransition({ data, payload: { nativeEvent, stateIndex } }){
       const transition = data.schema.transitions[data.schema.transitions.length - 1]
       const state = data.schema.states[stateIndex]
+      transition.target = state.id
       const { offsetX: x, offsetY: y } = nativeEvent
       const ratioX = (x - state.view.x) / state.view.width
       const ratioY = (y - state.view.y) / state.view.height

@@ -14,7 +14,7 @@ const State = ({ id, index, view }) => {
     setState({ controller })
   }, [])
 
-  const { x, y, width, height } = view
+  const { x, y, width, height, active } = view
 
   if(!controller) return ''
 
@@ -69,7 +69,7 @@ const State = ({ id, index, view }) => {
       y={y}
       width={width}
       height={height}
-      fill={state.selected ? "lightgray": "white"}
+      fill={state.selected || view.active ? "lightgray": "white"}
       stroke="gray"
       strokeWidth={2}
     />

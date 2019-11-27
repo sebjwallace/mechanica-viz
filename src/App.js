@@ -5,6 +5,7 @@ import './components/State.machine'
 import './components/Transition.machine'
 import './components/Model.machine'
 import './components/PropertiesPanel.machine'
+import './components/Machine.machine'
 
 import Canvas from './components/Canvas'
 import ToolPanel from './components/ToolPanel'
