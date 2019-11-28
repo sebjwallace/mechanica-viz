@@ -24,7 +24,9 @@ const Transition = ({
   const [ pointA, pointB ] = points
   const textX = pointA.x + (pointB.x - pointA.x) / 2
   const textY = pointA.y + (pointB.y - pointA.y) / 2
-  const textWidth = calcTextWidth(event) * 0.9
+  const fontSize = 10
+  const textWidth = calcTextWidth(event, '"Roboto"', fontSize)
+  const textPadding = 2
   const pointerEvents = state.idle ? 'stroke' : 'none'
 
   const path = 'M ' + points.map(({ x, y }, i) => {
@@ -79,29 +81,31 @@ const Transition = ({
         />
       })
     }
-    <g
-      onMouseDown={e => r.send({
-        event: 'playerEvent',
-        payload: { event }
-      })}
-    >
-      <rect
-        x={textX-textWidth/2}
-        y={textY-10}
-        width={textWidth}
-        height={20}
-        fill="white"
-        stroke="lightgray"
-        strokeWidth={1}
-      />
-      <text
-        x={textX-(textWidth/2)}
-        y={textY}
-        fontSize={10}
+    {
+      state.idle && <g
+        onMouseDown={e => r.send({
+          event: 'playerEvent',
+          payload: { event }
+        })}
       >
-        { event }
-      </text>
-    </g>
+        <rect
+          x={textX-textWidth/2-textPadding*2}
+          y={textY-fontSize}
+          width={textWidth+textPadding*4}
+          height={fontSize+textPadding*4}
+          fill="white"
+          stroke="lightgray"
+          strokeWidth={1}
+        />
+        <text
+          x={textX-textWidth/2}
+          y={textY+textPadding}
+          fontSize={fontSize}
+        >
+          { event }
+        </text>
+      </g>
+    }
   </g>
 }
 

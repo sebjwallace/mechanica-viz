@@ -51,7 +51,13 @@ const State = ({ id, index, view }) => {
     })
   }
 
-  const textWidth = calcTextWidth(id)
+  const fontSize = 14
+  const textWidth = calcTextWidth(id, '"Roboto"', fontSize)
+  const textX = x + (width / 2) - (textWidth / 2)
+  const textY = y + (height / 2) + (fontSize / 3)
+  const fill = state.selected || view.active ? "lightgray": "white"
+  const interfaceDiameter = 4
+  const interfaceRadius = interfaceDiameter / 2
 
   return <g
     key={id}
@@ -69,46 +75,47 @@ const State = ({ id, index, view }) => {
       y={y}
       width={width}
       height={height}
-      fill={state.selected || view.active ? "lightgray": "white"}
+      fill={fill}
       stroke="gray"
       strokeWidth={2}
     />
     <text
-      x={x+width/2-textWidth/2}
-      y={y+height/2+4}
+      x={textX}
+      y={textY}
+      fontSize={fontSize}
     >
       { id }
     </text>
     <rect
       className="interface"
-      x={x-2}
+      x={x-interfaceRadius}
       y={y}
-      width={4}
+      width={interfaceDiameter}
       height={height}
       onMouseDown={interfaceMouseDown}
     />
     <rect
       className="interface"
-      x={x+width-2}
+      x={x+width-interfaceRadius}
       y={y}
-      width={4}
+      width={interfaceDiameter}
       height={height}
       onMouseDown={interfaceMouseDown}
     />
     <rect
       className="interface"
       x={x}
-      y={y-2}
+      y={y-interfaceRadius}
       width={width}
-      height={4}
+      height={interfaceDiameter}
       onMouseDown={interfaceMouseDown}
     />
     <rect
       className="interface"
       x={x}
-      y={y+height-2}
+      y={y+height-interfaceRadius}
       width={width}
-      height={4}
+      height={interfaceDiameter}
       onMouseDown={interfaceMouseDown}
     />
     {

@@ -28,6 +28,12 @@ r.create({
       method: 'createTransition'
     },
     {
+      event: 'esc',
+      source: 'drawTransition',
+      target: 'idle',
+      method: 'deleteTransition'
+    },
+    {
       event: 'interfaceMouseDown',
       source: 'drawTransition',
       target: 'idle',
@@ -100,6 +106,16 @@ r.create({
       return {
         data,
         send: { event: 'updatedModel', payload: data }
+      }
+    },
+    deleteTransition({ data }){
+      data.schema.transitions.pop()
+      return {
+        data,
+        send: {
+          event: 'updatedModel',
+          payload: data
+        }
       }
     },
     closeTransition({ data, payload: { nativeEvent, stateIndex } }){

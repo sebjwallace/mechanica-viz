@@ -42,7 +42,7 @@ r.create({
         data
       }
     },
-    start({ data, payload }){
+    start({ data }){
       data.machine = r.create({ ...data.model.schema })
       const intitalState = data.model.schema.states.find(({ id }) => id === data.machine.state.id)
       intitalState.view.active = true
@@ -55,6 +55,7 @@ r.create({
       }
     },
     stop({ data }){
+      data.machine.delete()
       data.machine = null
       return {
         data

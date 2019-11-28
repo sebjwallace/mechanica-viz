@@ -33,6 +33,12 @@ const schema = {
       target: 'idle'
     },
     {
+      event: 'esc',
+      source: 'move',
+      target: 'idle',
+      method: 'remove'
+    },
+    {
       event: 'transitionMouseDown',
       source: 'idle',
       target: 'edit',
@@ -170,6 +176,9 @@ const schema = {
           payload: data.model
         }
       }
+    },
+    remove(){
+      return { delete: true }
     }
   }
 }

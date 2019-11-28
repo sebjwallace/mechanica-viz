@@ -65,6 +65,12 @@ export default r.register({
       event: 'mouseUp',
       source: 'selected.moveCP',
       target: 'selected.idle'
+    },
+    {
+      event: 'del',
+      source: 'selected.idle',
+      target: 'idle',
+      method: 'remove'
     }
   ],
   subscriptions: [
@@ -144,6 +150,21 @@ export default r.register({
             payload: { id: data.index }
           }
         ]
+      }
+    },
+    remove({ data }){
+      const { schema } = data.model
+      const state = schema.states[data.index]
+      schema.states.splice(data.index, 1)
+      schema.transitions = schema.transitions.filter(({ source, target }) => {
+        return source !== state.id && target !== state.id
+      })
+      return {
+        send: {
+          event: 'updateModel',
+          payload: data.model
+        },
+        delete: true
       }
     }
   }

@@ -18,10 +18,10 @@ class Canvas extends React.Component {
 
     return <div
       tabIndex="0"
-      onKeyDown={(e) => {
-        r.send(e.ctrlKey && {event: 'multiselectOn'})
-        r.send(e.keyCode === 27 && {event: 'esc'})
-      }}
+      onKeyDown={(e) => r.send([
+        e.keyCode === 27 && {event: 'esc'},
+        e.keyCode === 46 && {event: 'del'}
+      ])}
       onKeyUp={(e) => {
         r.send({event: 'multiselectOff'})
       }}
