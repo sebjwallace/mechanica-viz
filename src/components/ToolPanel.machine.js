@@ -1,8 +1,9 @@
 import r from 'rithmic'
 
 r.register({
-  id: 'propertiesPanel',
+  id: 'toolPanel',
   data: {},
   states: [],
-  transitions: []
+  transitions: [],
+  children: []
 })

@@ -50,6 +50,16 @@ r.create({
       method: 'createState'
     }
   ],
+  children: [
+    {
+      id: 'states',
+      schema: ['state']
+    },
+    {
+      id: 'transitions',
+      schema: ['transition']
+    }
+  ],
   methods: {
     update({ data, payload }){
       data = payload || data
@@ -75,6 +85,10 @@ r.create({
       data.schema.states.push(state)
       return {
         data,
+        create: {
+          child: 'states',
+          payload: data
+        },
         send: {
           event: 'updatedModel',
           payload: data

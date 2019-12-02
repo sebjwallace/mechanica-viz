@@ -1,15 +1,14 @@
 import React from 'react'
 import r from 'rithmic'
 
-import './components/State.machine'
-import './components/Transition.machine'
-import './components/Model.machine'
+import './components/App.machine'
+import './components/Graph.machine'
+import './components/ToolPanel.machine'
 import './components/PropertiesPanel.machine'
-import './components/Machine.machine'
+import './App.tree'
 
-import Canvas from './components/Canvas'
-import ToolPanel from './components/ToolPanel'
-import PropertiesPanel from './components/PropertiesPanel'
+console.log(r.tree.createMachineTree('app'))
+console.log(r.tree.createObjectTree())
 
 class App extends React.Component {
 
@@ -19,9 +18,6 @@ class App extends React.Component {
 
     return (
       <div className="App">
-        <ToolPanel />
-        <Canvas />
-        <PropertiesPanel />
       </div>
     )
 
