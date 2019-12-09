@@ -1,7 +1,7 @@
 import r from 'rithmic'
 
 r.register({
-  id: 'graph',
+  id: 'canvas',
   data: {
     states: [],
     transitions: []
@@ -9,10 +9,5 @@ r.register({
   states: [
     { id: 'idle', initial: true }
   ],
-  transitions: [],
-  methods: {
-    constructor({ payload }){
-      console.log(payload)
-    }
-  }
+  transitions: []
 })

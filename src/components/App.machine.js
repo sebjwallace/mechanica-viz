@@ -12,7 +12,7 @@ r.register({
       return {
         send: {
           event: 'createGraph',
-          payload: { message: 'created graph' }
+          payload: { message: 'create graph' }
         }
       }
     }
