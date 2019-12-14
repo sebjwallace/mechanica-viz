@@ -29,6 +29,23 @@ r.tree.register({
             ]
           }
         ]
+      },
+      {
+        schema: 'PropsPanel',
+        children: [
+          {
+            schema: 'StateProps'
+          },
+          {
+            schema: 'TransitionProps'
+          }
+        ]
+      },
+      {
+        schema: 'CreateStateModal'
+      },
+      {
+        schema: 'CreateTransitionModal'
       }
     ]
   }

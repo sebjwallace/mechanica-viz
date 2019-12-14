@@ -126,7 +126,7 @@ const schema = {
     }
   ],
   methods: {
-    constructor({ data, payload: { x, y, stateId, position } }){
+    constructor({ data, payload: { x, y, stateId } }){
       data.source = stateId
       data.view = {
         points: [
@@ -151,7 +151,13 @@ const schema = {
     },
     close({ data, payload }){
       data.target = payload.stateId
-      return { data }
+      return {
+        data,
+        send: {
+          event: 'CREATED:transition',
+          payload: data
+        }
+      }
     },
     edit({ data, payload }){
       const { nativeEvent: { offsetX, offsetY } } = payload

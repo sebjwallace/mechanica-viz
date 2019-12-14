@@ -1,16 +1,25 @@
 import r from 'rithmic'
+import { calcTextWidth } from '../utils/svg.util'
+
+const getStates = {
+  subscriptions: [
+    {
+      event: 'GET:states',
+      method: 'get'
+    }
+  ],
+  methods: {
+    get({ data }){
+      return {
+        response: data
+      }
+    }
+  }
+}
 
 export default r.register({
   id: 'state',
-  data: {
-    id: '',
-    view: {
-      x: 20,
-      y: 20,
-      width: 50,
-      height: 50
-    }
-  },
+  data: {},
   states: [
     {
       id: 'idle',
@@ -30,7 +39,8 @@ export default r.register({
     {
       event: 'stateMouseDown',
       source: 'idle',
-      target: 'selected.move'
+      target: 'selected.move',
+      publish: 'updated'
     },
     {
       event: 'mouseMove',
@@ -82,11 +92,43 @@ export default r.register({
       method: 'remove'
     }
   ],
+  publications: {
+    updated: {
+      event: 'UPDATED:state',
+      payload: ({ data }) => data
+    },
+    movedScaled: {
+      event: 'stateMovedScaled',
+      payload: ({ data: { before, view: after } }) => ({ before, after })
+    }
+  },
+  subscriptions: [
+    {
+      event: 'PATCH:state',
+      method: 'patch'
+    },
+    ...getStates.subscriptions
+  ],
   methods: {
-    constructor({ data }){
-      data.id = Math.random().toString().slice(0,4)
+    constructor({ payload: { id } }){
+      const fontSize = 14
       return {
-        data
+        data: {
+          id,
+          view: {
+            x: 0,
+            y: 0,
+            height: 50,
+            width: calcTextWidth(id, '"Roboto"', fontSize) * 1.5
+          }
+        }
+      }
+    },
+    ...getStates.methods,
+    patch({ data, payload }){
+      return {
+        data: { ...data, ...payload },
+        publish: 'updated'
       }
     },
     move({ data, payload }){
@@ -94,12 +136,13 @@ export default r.register({
       const before = { ...data.view }
       data.view.x += movementX
       data.view.y += movementY
+      data.before = before
       return {
         data,
-        send: {
-          event: 'stateMovedScaled',
-          payload: { before, after: { ...data.view } }
-        }
+        publish: [
+          'updated',
+          'movedScaled'
+        ]
       }
     },
     selectCP({ data, payload }){
@@ -110,6 +153,7 @@ export default r.register({
       const { movementX, movementY } = payload
       const { view } = data
       const prev = { ...view }
+      data.before = prev
       if(data.selectedCp === 'TL'){
         view.x += movementX
         view.y += movementY
@@ -132,10 +176,10 @@ export default r.register({
       }
       return {
         data,
-        send: {
-          event: 'stateMovedScaled',
-          payload: { before: prev, after: view }
-        }
+        publish: [
+          'updated',
+          'movedScaled'
+        ]
       }
     },
     remove(){

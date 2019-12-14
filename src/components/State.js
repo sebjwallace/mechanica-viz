@@ -67,7 +67,10 @@ export default ({
       send({ event: 'selectState', payload: { id } })
       e.stopPropagation()
     }}
-    onMouseUp={() => machine.receive({ event: 'stateMouseUp' })}
+    onMouseUp={() => {
+      machine.receive({ event: 'stateMouseUp' })
+      send({ event: 'PATCH:state/mouse-up' })
+    }}
   >
     <rect
       x={x}

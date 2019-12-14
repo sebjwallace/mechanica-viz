@@ -14,8 +14,6 @@ const Transition = ({
   machine
 }) => {
 
-  console.log(state)
-
   const { points } = view
 
   const [ pointA, pointB ] = points

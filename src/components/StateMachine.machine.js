@@ -27,10 +27,11 @@ export default r.register({
     }
   ],
   methods: {
-    createState(){
+    createState({ payload }){
       return {
         send: {
-          event: 'createState'
+          event: 'createState',
+          payload
         }
       }
     },
