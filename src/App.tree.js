@@ -42,7 +42,10 @@ r.tree.register({
         ]
       },
       {
-        schema: 'CreateStateModal'
+        schema: 'CreateStateModal',
+        domains: [
+          'PATCH:create-transition-modal'
+        ]
       },
       {
         schema: 'CreateTransitionModal'

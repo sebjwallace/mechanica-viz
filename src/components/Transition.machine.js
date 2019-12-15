@@ -3,11 +3,12 @@ import r from 'rithmic'
 const schema = {
   id: 'transition',
   data: {
-    event: 'switch',
+    event: '',
     view: {}
   },
   states: [
     { id: 'idle' },
+    { id: 'selected' },
     { id: 'move', initial: true },
     { id: 'edit' },
     { id: 'source.idle', initial: true },
@@ -35,8 +36,19 @@ const schema = {
     {
       event: 'interfaceMouseDown',
       source: 'move',
-      target: 'idle',
+      target: 'selected',
       method: 'close'
+    },
+    {
+      event: 'PATCH:transition',
+      source: 'selected',
+      target: 'selected',
+      method: 'patch'
+    },
+    {
+      event: 'mouseDown',
+      source: 'selected',
+      target: 'idle'
     },
     {
       event: 'esc',
@@ -51,10 +63,21 @@ const schema = {
       method: 'edit'
     },
     {
+      event: 'transitionMouseDown',
+      source: 'selected',
+      target: 'edit',
+      method: 'edit'
+    },
+    {
       event: 'mouseMove',
       source: 'edit',
       target: 'edit',
       method: 'edit'
+    },
+    {
+      event: 'mouseUp',
+      source: 'edit',
+      target: 'idle'
     },
     {
       event: 'selectState',
@@ -135,6 +158,11 @@ const schema = {
         ]
       }
       return { data }
+    },
+    patch({ data, payload }){
+      return {
+        data: { ...data, ...payload }
+      }
     },
     move({ data, payload }){
       const {

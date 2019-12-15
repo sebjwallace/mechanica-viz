@@ -17,6 +17,39 @@ const getStates = {
   }
 }
 
+const renameState = {
+  states: [
+    { id: 'rename.idle' },
+    { id: 'rename.selected', initial: true }
+  ],
+  transitions: [
+    {
+      event: 'keyDown',
+      source: 'rename.selected',
+      target: 'rename.selected',
+      method: 'rename'
+    },
+    {
+      event: 'mouseDown',
+      source: 'rename.selected',
+      target: 'rename.idle'
+    }
+  ],
+  methods: {
+    rename({ data, payload: { keyCode } }){
+      const isBackspace = keyCode === 8
+      const isInitial = data.id === 'undefined'
+      const str = String.fromCharCode(keyCode)
+      if(isBackspace) data.id = data.id.slice(0, -1)
+      else if(isInitial) data.id = str
+      else data.id += str
+      return {
+        data
+      }
+    }
+  }
+}
+
 export default r.register({
   id: 'state',
   data: {},
@@ -33,7 +66,8 @@ export default r.register({
     },
     {
       id: 'selected.moveCP'
-    }
+    },
+    ...renameState.states
   ],
   transitions: [
     {
@@ -52,6 +86,12 @@ export default r.register({
       event: 'mouseUp',
       source: 'selected.move',
       target: 'selected.idle'
+    },
+    {
+      event: 'PATCH:state',
+      source: 'selected.idle',
+      target: 'selected.idle',
+      method: 'patch'
     },
     {
       event: 'stateMouseDown',
@@ -90,7 +130,8 @@ export default r.register({
       source: 'selected.idle',
       target: 'idle',
       method: 'remove'
-    }
+    },
+    ...renameState.transitions
   ],
   publications: {
     updated: {
@@ -103,23 +144,22 @@ export default r.register({
     }
   },
   subscriptions: [
-    {
-      event: 'PATCH:state',
-      method: 'patch'
-    },
     ...getStates.subscriptions
   ],
   methods: {
-    constructor({ payload: { id } }){
+    constructor({ payload: { x, y } }){
+      const id = 'undefined'
       const fontSize = 14
+      const width = calcTextWidth(id, '"Roboto"', fontSize) * 1.5
+      const height = 20
       return {
         data: {
           id,
           view: {
-            x: 0,
-            y: 0,
-            height: 50,
-            width: calcTextWidth(id, '"Roboto"', fontSize) * 1.5
+            x: x - (width / 2),
+            y: y - (height / 2),
+            height,
+            width
           }
         }
       }
@@ -186,6 +226,7 @@ export default r.register({
       return {
         delete: true
       }
-    }
+    },
+    ...renameState.methods
   }
 })

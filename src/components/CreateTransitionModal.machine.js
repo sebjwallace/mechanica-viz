@@ -2,9 +2,6 @@ import rithmic from 'rithmic'
 
 rithmic.register({
   id: 'CreateTransitionModal',
-  data: {
-    event: ''
-  },
   states: [
     {
       id: 'hidden',
@@ -26,23 +23,5 @@ rithmic.register({
       target: 'hidden',
       method: 'reset'
     }
-  ],
-  subscriptions: [
-    {
-      event: 'PATCH:create-transition-modal/event',
-      method: 'patch'
-    }
-  ],
-  methods: {
-    patch({ data, payload }){
-      return {
-        data: { ...data, ...payload }
-      }
-    },
-    reset(){
-      return {
-        data: { event: '' }
-      }
-    }
-  }
+  ]
 })

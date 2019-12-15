@@ -1,0 +1,12 @@
+.Props {
+
+  .labeled-input {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    input {
+      margin-left: 0.5em;
+    }
+  }
+
+}

@@ -1,7 +1,7 @@
 import React from 'react'
 
 
-export default ({ send, state, data }) => {
+export default ({ send, state }) => {
 
   if(state.hidden) return ''
 
@@ -14,7 +14,7 @@ export default ({ send, state, data }) => {
       <input
         type="text"
         onChange={e => send({
-          event: 'PATCH:create-transition-modal/event',
+          event: 'PATCH:transition',
           payload: { event: e.target.value }
         })}
       />
@@ -24,14 +24,7 @@ export default ({ send, state, data }) => {
         event: 'CMD:create-transition-modal/hide'
       })}
     >
-      Create
-    </button>
-    <button
-      onClick={() => send({
-        event: 'CMD:create-transition-modal/hide'
-      })}
-    >
-      Cancel
+      Done
     </button>
   </div>
 

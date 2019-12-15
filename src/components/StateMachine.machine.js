@@ -28,10 +28,11 @@ export default r.register({
   ],
   methods: {
     createState({ payload }){
+      const { nativeEvent: { offsetX: x, offsetY: y } } = payload
       return {
         send: {
           event: 'createState',
-          payload
+          payload: { x, y }
         }
       }
     },

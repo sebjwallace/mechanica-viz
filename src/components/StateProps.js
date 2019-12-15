@@ -1,13 +1,15 @@
 import React from 'react'
 
+import './Props.scss'
+
 export default ({ send, data, children }) => {
 
   const { selectedState: { id, view: { x, y, width, height } } } = data
 
   const event = 'PATCH:state'
 
-  return <div>
-    <label>
+  return <div className="Props">
+    <label className="labeled-input">
       Id
       <input
         type="text"
@@ -18,7 +20,7 @@ export default ({ send, data, children }) => {
         })}
       />
     </label>
-    <label>
+    <label className="labeled-input">
       x
       <input
         type="text"
@@ -29,7 +31,7 @@ export default ({ send, data, children }) => {
         })}
       />
     </label>
-    <label>
+    <label className="labeled-input">
       y
       <input
         type="text"
@@ -40,7 +42,7 @@ export default ({ send, data, children }) => {
         })}
       />
     </label>
-    <label>
+    <label className="labeled-input">
       Width
       <input
         type="text"
@@ -51,7 +53,7 @@ export default ({ send, data, children }) => {
         })}
       />
     </label>
-    <label>
+    <label className="labeled-input">
       Height
       <input
         type="text"

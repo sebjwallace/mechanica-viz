@@ -15,6 +15,9 @@ export default ({
   machine
 }) => {
 
+  const isTextSelected = state['rename.selected']
+  const textFill = isTextSelected ? 'blue' : 'gray'
+
   const handleRadius = 4
   const fontSize = 14
   const textWidth = calcTextWidth(id, '"Roboto"', fontSize)
@@ -62,7 +65,7 @@ export default ({
   return <g
     className="State"
     onMouseDown={e => {
-      // send(!e.ctrlKey && { event: 'deselectAllNodes' })
+      send(!e.ctrlKey && { event: 'deselectAllNodes' })
       machine.receive({ event: 'stateMouseDown' })
       send({ event: 'selectState', payload: { id } })
       e.stopPropagation()
@@ -84,6 +87,7 @@ export default ({
     <text
       x={textX}
       y={textY}
+      fill={textFill}
       fontSize={fontSize}
     >
       { id }

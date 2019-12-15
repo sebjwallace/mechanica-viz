@@ -76,7 +76,7 @@ const Transition = ({
       })
     }
     {
-      <g
+      event && <g
         onMouseDown={e => send({
           event: 'playerEvent',
           payload: { event }

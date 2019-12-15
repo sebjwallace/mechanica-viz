@@ -7,7 +7,8 @@ export default ({ state, children: { stateMachine }, send }) => {
     tabIndex="0"
     onKeyDown={(e) => send([
       e.keyCode === 27 && {event: 'esc'},
-      e.keyCode === 46 && {event: 'del'}
+      e.keyCode === 46 && {event: 'del'},
+      { event: 'keyDown', payload: e }
     ])}
     onKeyUp={(e) => {
       send({event: 'multiselectOff'})
@@ -26,6 +27,10 @@ export default ({ state, children: { stateMachine }, send }) => {
       })}
       onMouseMove={e => send({
         event: 'mouseMove',
+        payload: e
+      })}
+      onDoubleClick={e => send({
+        event: 'addState',
         payload: e
       })}
     >
