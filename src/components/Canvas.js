@@ -1,9 +1,13 @@
 import React from 'react'
 import StateMachine from './StateMachine'
+import ContextMenu from './ContextMenu'
 
-export default ({ state, children: { stateMachine }, send }) => {
+import './Canvas.scss'
+
+export default ({ state, children: { stateMachine, contextMenu }, send }) => {
 
   return <div
+    className="Canvas"
     tabIndex="0"
     onKeyDown={(e) => send([
       e.keyCode === 27 && {event: 'esc'},
@@ -33,9 +37,16 @@ export default ({ state, children: { stateMachine }, send }) => {
         event: 'addState',
         payload: e
       })}
+      onContextMenu={e => send({
+        event: 'mouseDownRight',
+        payload: e
+      }) && e.preventDefault()}
     >
       <StateMachine { ...stateMachine } />
     </svg>
+    <div className="overlay">
+      <ContextMenu { ...contextMenu } />
+    </div>
   </div>
 
 }

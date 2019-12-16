@@ -6,9 +6,6 @@ r.tree.register({
     schema: 'app',
     children: [
       {
-        schema: 'toolPanel'
-      },
-      {
         schema: 'canvas',
         children: [
           {
@@ -27,6 +24,10 @@ r.tree.register({
                 create: 'createTransition'
               }
             ]
+          },
+          {
+            schema: 'ContextMenu',
+            alias: 'contextMenu'
           }
         ]
       },

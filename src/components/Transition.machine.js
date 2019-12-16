@@ -1,5 +1,29 @@
 import r from 'rithmic'
 
+const updateSourceTargetId = {
+  subscriptions: [
+    {
+      event: 'stateChangeId',
+      method: 'updateSourceTargetId'
+    }
+  ],
+  methods: {
+    updateSourceTargetId({ data, payload }){
+      const { source: sourceId, target: targetId } = data
+      const { prevId, id } = payload
+      if(sourceId === prevId){
+        data.source = id
+      }
+      if(targetId === prevId){
+        data.target = id
+      }
+      return {
+        data
+      }
+    }
+  }
+}
+
 const schema = {
   id: 'transition',
   data: {
@@ -148,6 +172,9 @@ const schema = {
       target: 'targetCP.idle'
     }
   ],
+  subscriptions: [
+    ...updateSourceTargetId.subscriptions
+  ],
   methods: {
     constructor({ data, payload: { x, y, stateId } }){
       data.source = stateId
@@ -255,7 +282,8 @@ const schema = {
       point.x = x
       point.y = y
       return { data }
-    }
+    },
+    ...updateSourceTargetId.methods
   }
 }
 

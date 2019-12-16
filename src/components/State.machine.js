@@ -17,39 +17,6 @@ const getStates = {
   }
 }
 
-const renameState = {
-  states: [
-    { id: 'rename.idle' },
-    { id: 'rename.selected', initial: true }
-  ],
-  transitions: [
-    {
-      event: 'keyDown',
-      source: 'rename.selected',
-      target: 'rename.selected',
-      method: 'rename'
-    },
-    {
-      event: 'mouseDown',
-      source: 'rename.selected',
-      target: 'rename.idle'
-    }
-  ],
-  methods: {
-    rename({ data, payload: { keyCode } }){
-      const isBackspace = keyCode === 8
-      const isInitial = data.id === 'undefined'
-      const str = String.fromCharCode(keyCode)
-      if(isBackspace) data.id = data.id.slice(0, -1)
-      else if(isInitial) data.id = str
-      else data.id += str
-      return {
-        data
-      }
-    }
-  }
-}
-
 export default r.register({
   id: 'state',
   data: {},
@@ -66,8 +33,7 @@ export default r.register({
     },
     {
       id: 'selected.moveCP'
-    },
-    ...renameState.states
+    }
   ],
   transitions: [
     {
@@ -92,6 +58,12 @@ export default r.register({
       source: 'selected.idle',
       target: 'selected.idle',
       method: 'patch'
+    },
+    {
+      event: 'stateChangeId',
+      source: 'selected.idle',
+      target: 'selected.idle',
+      method: 'changeId'
     },
     {
       event: 'stateMouseDown',
@@ -130,8 +102,7 @@ export default r.register({
       source: 'selected.idle',
       target: 'idle',
       method: 'remove'
-    },
-    ...renameState.transitions
+    }
   ],
   publications: {
     updated: {
@@ -169,6 +140,12 @@ export default r.register({
       return {
         data: { ...data, ...payload },
         publish: 'updated'
+      }
+    },
+    changeId({ data, payload }){
+      data.id = payload.id
+      return {
+        data
       }
     },
     move({ data, payload }){
@@ -226,7 +203,6 @@ export default r.register({
       return {
         delete: true
       }
-    },
-    ...renameState.methods
+    }
   }
 })
