@@ -1,0 +1,15 @@
+
+.AppSection {
+
+  .header {
+    height: 40px;
+    background: #373737;
+  }
+
+  .body {
+    background: #2c2c2c;
+    width: 100%;
+    height: calc(100% - 40px);
+  }
+
+}

@@ -1,50 +1,45 @@
 import React from 'react'
-import r from 'rithmic'
+import Rithmic from 'rithmic'
 
-import './components/App.machine'
-import './components/Canvas.machine'
-import './components/State.machine'
-import './components/Transition.machine'
-import './components/StateMachine.machine'
-import './components/PropsPanel.machine'
-import './components/StateProps.machine'
-import './components/TransitionProps.machine'
-import './components/CreateStateModal.machine'
-import './components/CreateTransitionModal.machine'
-import './components/ContextMenu.machine'
-import './App.tree'
+import { tree } from './setup'
 
-import Canvas from './components/Canvas'
-import PropsPanel from './components/PropsPanel'
-import CreateStateModal from './components/CreateStateModal'
-import CreateTransitionModal from './components/CreateTransitionModal'
-
-console.log(r.tree.createMachineTree('app'))
-console.log(r.tree.createObjectTree())
-window.r = r
-
+import AppTabs from './components/AppTabs'
+import AppSection from './components/AppSection'
 class App extends React.Component {
 
   constructor(props){
     super(props)
-    this.state = {
-      ...r.tree.createObjectTree()
-    }
-    r.watch(() => {
-      this.setState({
-        ...r.tree.createObjectTree()
-      })
-    })
+    // this.state = {
+    //   ...tree.createObjectTree()
+    // }
+    // Rithmic.watch(() => {
+    //   this.setState({
+    //     ...tree.createObjectTree()
+    //   })
+    // })
   }
 
   render(){
 
     return (
       <div className="App">
-        <Canvas { ...this.state.children.canvas } />
-        <PropsPanel { ...this.state.children.PropsPanel } />
-        <CreateStateModal { ...this.state.children.CreateStateModal } />
-        <CreateTransitionModal { ...this.state.children.CreateTransitionModal } />
+        <AppTabs />
+        <div style={{ display: 'flex', height: '100%' }}>
+          <AppSection
+            width="70%"
+          />
+          <div style={{ width: '30%' }}>
+            <AppSection
+              height="50%"
+              left="2px"
+              bottom="2px"
+            />
+            <AppSection
+              height="50%"
+              left="2px"
+            />
+          </div>
+        </div>
       </div>
     )
 
