@@ -4,12 +4,48 @@ body {
   font-family: 'Overpass Mono', monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: white;
   background: #202020;
+  font-size: 0.6em;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+input, select {
+  color: white;
+  background: #202020;
+  border: none;
+  padding: 2px;
+  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+button {
+  color: white;
+  background: #484848;
+  padding: 1px 7px;
+  border: 1px solid #292929;
+}
+
+button:disabled {
+  opacity: 0.5;
+}
+
+table {
+  text-align: left;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #292929;
+  padding: 4px;
+  border-collapse: collapse;
+}
+
+tr:nth-child(even) {
+  background-color: #484848;
 }
 
 .App {

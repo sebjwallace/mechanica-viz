@@ -3,6 +3,7 @@ import React from 'react'
 import './AppSection.scss'
 
 export default ({
+  children,
   width = '100%',
   height = '100%',
   left = '0',
@@ -22,7 +23,7 @@ export default ({
 
     </div>
     <div className="body">
-
+      { children }
     </div>
   </div>
 

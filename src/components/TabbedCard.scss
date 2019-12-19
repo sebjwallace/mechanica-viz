@@ -1,0 +1,26 @@
+
+.TabbedCard {
+
+  background: #202020;
+  color: white;
+  padding: 4px;
+  
+  .tabs {
+
+    display: flex;
+    justify-content: normal;
+
+    .tab {
+      padding: 4px;
+      margin-right: 2px;
+      margin-bottom: 0;
+      background: #373737;
+    }
+  }
+
+  .content {
+    background: #373737;
+    padding: 4px;
+  }
+
+}
