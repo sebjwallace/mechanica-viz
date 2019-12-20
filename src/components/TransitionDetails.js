@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Rithmic from 'rithmic'
 
-export default ({ schemaId, states, transitions }) => {
+export default ({ schemaId, states, transitions, methods = {} }) => {
+
+  const methodNames = Object.keys(methods)
 
   const send = () => Rithmic.send({
     event: 'SCHEMA:CREATE_TRANSITION',
@@ -24,7 +26,16 @@ export default ({ schemaId, states, transitions }) => {
         </tr>
         {
           transitions.map(({ event, source, target, method }, index) => <tr>
-            <td>{ event }</td>
+            <td>
+              <input
+                type="text"
+                value={event}
+                onChange={e => Rithmic.send({
+                  event: 'SCHEMA:TRANSITION:SET_EVENT',
+                  payload: { id: schemaId, index, event: e.target.value }
+                })}
+              />
+            </td>
             <td>
               <select
                 value={source}
@@ -55,7 +66,22 @@ export default ({ schemaId, states, transitions }) => {
                 }
               </select>
             </td>
-            <td>{ method }</td>
+            <td>
+              <select
+                value={method}
+                onChange={e => Rithmic.send({
+                  event: 'SCHEMA:TRANSITION:SET_METHOD',
+                  payload: { id: schemaId, index, methodName: e.target.value }
+                })}
+              >
+                <option></option>
+                {
+                  methodNames.map(methodName => <option>
+                    { methodName }
+                  </option>)
+                }
+              </select>
+            </td>
           </tr>)
         }
       </tbody>

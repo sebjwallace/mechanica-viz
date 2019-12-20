@@ -39,6 +39,16 @@ export default {
       event: 'SCHEMA:STATE:DELETE',
       method: 'deleteState',
       guard: 'isResponsible'
+    },
+    {
+      event: 'SCHEMA:TRANSITION:SET_METHOD',
+      method: 'setTransitionMethod',
+      guard: 'isResponsible'
+    },
+    {
+      event: 'SCHEMA:TRANSITION:SET_EVENT',
+      method: 'setTransitionEvent',
+      guard: 'isResponsible'
     }
   ],
   data: {
@@ -112,6 +122,14 @@ export default {
     },
     setTransitionTarget({ data, payload }){
       data.transitions[payload.index].target = payload.target
+      return { data }
+    },
+    setTransitionMethod({ data, payload }){
+      data.transitions[payload.index].method = payload.methodName
+      return { data }
+    },
+    setTransitionEvent({ data, payload }){
+      data.transitions[payload.index].event = payload.event
       return { data }
     },
     createSubscription({ data, payload }){

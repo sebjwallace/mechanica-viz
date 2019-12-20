@@ -45,7 +45,7 @@ export default () => {
             <TabbedCard
               tabs={[
                 { id: 'states', label: 'States', content: <StateDetails schemaId={id} states={states} /> },
-                { id: 'transitions', label: 'Transitions', content: <TransitionDetails schemaId={id} states={states} transitions={transitions} /> },
+                { id: 'transitions', label: 'Transitions', content: <TransitionDetails schemaId={id} states={states} transitions={transitions} methods={methods} /> },
                 { id: 'subscriptions', label: 'Subscriptions', content: <SubscriptionDetails schemaId={id} subscriptions={subscriptions} methods={methods} /> },
                 { id: 'publications', label: 'Publications' },
                 { id: 'methods', label: 'Methods', content: <MethodDetails schemaId={id} methods={methods} /> },
