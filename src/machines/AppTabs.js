@@ -7,11 +7,11 @@ export default {
   transitions: [],
   data: {
     tabs: [
-      { id: 'machine', label: 'Machine' },
       { id: 'registry', label: 'Registry' },
+      { id: 'machine', label: 'Machine' },
       { id: 'tree', label: 'Tree' }
     ],
-    selectedTab: 'machine'
+    selectedTab: 'registry'
   },
   subscriptions: [
     {

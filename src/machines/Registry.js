@@ -13,6 +13,10 @@ export default {
     {
       event: 'REGISTRY:CREATE_SCHEMA',
       method: 'createSchema'
+    },
+    {
+      event: 'SCHEMA:UPDATED',
+      method: 'save'
     }
   ],
   publications: [

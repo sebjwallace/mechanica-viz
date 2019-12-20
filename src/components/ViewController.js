@@ -8,8 +8,8 @@ export default ({ send, root }) => {
   const { selectedTab } = root.AppTabs.data
 
   const views = {
-    machine: <MachineView />,
     registry: <RegistryView />,
+    machine: <MachineView />,
     tree: <div>tree</div>
   }
 

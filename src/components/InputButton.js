@@ -32,7 +32,10 @@ export default ({
     />
     <button
       disabled={disabled}
-      onClick={onClick}
+      onClick={() => {
+        onClick(value)
+        setState({ value: '' })
+      }}
       style={{
         borderLeft: 'none'
       }}

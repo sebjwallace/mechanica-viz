@@ -7,27 +7,72 @@ export default {
   subscriptions: [
     {
       event: 'SCHEMA:CREATE_STATE',
-      method: 'createState'
+      method: 'createState',
+      guard: 'isResponsible'
     },
     {
       event: 'SCHEMA:CREATE_TRANSITION',
-      method: 'createTransition'
+      method: 'createTransition',
+      guard: 'isResponsible'
     },
     {
       event: 'SCHEMA:TRANSITION:SET_SOURCE',
-      method: 'setTransitionSource'
+      method: 'setTransitionSource',
+      guard: 'isResponsible'
     },
     {
       event: 'SCHEMA:TRANSITION:SET_TARGET',
-      method: 'setTransitionTarget'
+      method: 'setTransitionTarget',
+      guard: 'isResponsible'
+    },
+    {
+      event: 'SCHEMA:SUBSCRIPTION:CREATE',
+      method: 'createSubscription',
+      guard: 'isResponsible'
+    },
+    {
+      event: 'SCHEMA:METHOD:CREATE',
+      method: 'createMethod',
+      guard: 'isResponsible'
+    },
+    {
+      event: 'SCHEMA:STATE:DELETE',
+      method: 'deleteState',
+      guard: 'isResponsible'
     }
   ],
   data: {
     id: '',
     states: [
-      { id: 'default', initial: true }
+      { id: 'on' },
+      { id: 'off' },
+      { id: 'idle' }
     ],
-    transitions: []
+    transitions: [
+      {
+        event: 'SWITCH',
+        source: 'on',
+        target: 'off'
+      },
+      {
+        event: 'SWITCH',
+        source: 'off',
+        target: 'on'
+      },
+      {
+        event: 'TOGGLE',
+        source: 'on',
+        target: 'idle'
+      },
+      {
+        event: 'TOGGLE',
+        source: 'idle',
+        target: 'off'
+      }
+    ],
+    subscriptions: [],
+    publications: [],
+    methods: {}
   },
   methods: {
     constructor({ data, payload }){
@@ -40,12 +85,20 @@ export default {
         }
       }
     },
+    isResponsible({ data, payload }){
+      return data.id === payload.id
+    },
     createState({ data, payload }){
-      data.states.push({ id: payload.id })
+      data.states.push({ id: payload.stateId })
       return { data }
     },
-    createTransition({ data, payload }){
-      if(data.id !== payload.id) return
+    deleteState({ data, payload }){
+      data.states = data.states.filter(({ id }) => id !== payload.stateId)
+      return {
+        data
+      }
+    },
+    createTransition({ data }){
       data.transitions.push({
         event: '',
         source: '',
@@ -54,13 +107,21 @@ export default {
       return { data }
     },
     setTransitionSource({ data, payload }){
-      if(data.id !== payload.id) return
       data.transitions[payload.index].source = payload.source
       return { data }
     },
     setTransitionTarget({ data, payload }){
-      if(data.id !== payload.id) return
       data.transitions[payload.index].target = payload.target
+      return { data }
+    },
+    createSubscription({ data, payload }){
+      const { event, method } = payload
+      data.subscriptions.push({ event, method })
+      return { data }
+    },
+    createMethod({ data, payload }){
+      const { methodName } = payload
+      data.methods[methodName] = () => {}
       return { data }
     }
   }
