@@ -1,0 +1,23 @@
+
+.EventInput {
+
+  position: relative;
+  width: 200px;
+
+  input {
+    width: calc(100% - 4px);
+  }
+
+  .dropdown {
+    position: absolute;
+    width: 100%;
+    z-index: 100;
+  }
+
+  .option {
+    background: #121212;
+    padding: 4px;
+    cursor: pointer;
+  }
+
+}

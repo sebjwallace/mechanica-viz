@@ -44,15 +44,14 @@ export default () => {
           <AccordionItem title={id}>
             <TabbedCard
               tabs={[
+                { id: 'chart', label: 'Chart', content: <MachineChart states={states} transitions={transitions} /> },
                 { id: 'states', label: 'States', content: <StateDetails schemaId={id} states={states} /> },
                 { id: 'transitions', label: 'Transitions', content: <TransitionDetails schemaId={id} states={states} transitions={transitions} methods={methods} /> },
                 { id: 'subscriptions', label: 'Subscriptions', content: <SubscriptionDetails schemaId={id} subscriptions={subscriptions} methods={methods} /> },
                 { id: 'publications', label: 'Publications' },
                 { id: 'methods', label: 'Methods', content: <MethodDetails schemaId={id} methods={methods} /> },
-                { id: 'events', label: 'Events' },
                 { id: 'data', label: 'Data' },
-                { id: 'definition', label: 'Definition', content: <DefinitionDetails schema={schema} /> },
-                { id: 'chart', label: 'Chart', content: <MachineChart states={states} transitions={transitions} /> }
+                { id: 'definition', label: 'Definition', content: <DefinitionDetails schema={schema} /> }
               ]}
             />
           </AccordionItem>

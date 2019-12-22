@@ -49,6 +49,10 @@ export default {
       event: 'SCHEMA:TRANSITION:SET_EVENT',
       method: 'setTransitionEvent',
       guard: 'isResponsible'
+    },
+    {
+      event: 'SCHEMA:GET_EVENTS',
+      method: 'getEvents'
     }
   ],
   data: {
@@ -141,6 +145,12 @@ export default {
       const { methodName } = payload
       data.methods[methodName] = () => {}
       return { data }
+    },
+    getEvents({ data }){
+      const events = data.transitions.map(({ event }) => event)
+      return {
+        response: events
+      }
     }
   }
 }

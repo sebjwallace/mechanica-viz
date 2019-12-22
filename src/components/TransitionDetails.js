@@ -1,5 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Rithmic from 'rithmic'
+
+import EventInput from './EventInput'
 
 export default ({ schemaId, states, transitions, methods = {} }) => {
 
@@ -27,12 +29,11 @@ export default ({ schemaId, states, transitions, methods = {} }) => {
         {
           transitions.map(({ event, source, target, method }, index) => <tr>
             <td>
-              <input
-                type="text"
+              <EventInput
                 value={event}
-                onChange={e => Rithmic.send({
+                onChange={value => Rithmic.send({
                   event: 'SCHEMA:TRANSITION:SET_EVENT',
-                  payload: { id: schemaId, index, event: e.target.value }
+                  payload: { id: schemaId, index, event: value }
                 })}
               />
             </td>
