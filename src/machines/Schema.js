@@ -53,37 +53,17 @@ export default {
     {
       event: 'SCHEMA:GET_EVENTS',
       method: 'getEvents'
+    },
+    {
+      event: 'NODE:MOVED',
+      method: 'updateView',
+      guard: 'isResponsible'
     }
   ],
   data: {
     id: '',
-    states: [
-      { id: 'on' },
-      { id: 'off' },
-      { id: 'idle' }
-    ],
-    transitions: [
-      {
-        event: 'SWITCH',
-        source: 'on',
-        target: 'off'
-      },
-      {
-        event: 'SWITCH',
-        source: 'off',
-        target: 'on'
-      },
-      {
-        event: 'TOGGLE',
-        source: 'on',
-        target: 'idle'
-      },
-      {
-        event: 'TOGGLE',
-        source: 'idle',
-        target: 'off'
-      }
-    ],
+    states: [],
+    transitions: [],
     subscriptions: [],
     publications: [],
     methods: {}
@@ -100,10 +80,13 @@ export default {
       }
     },
     isResponsible({ data, payload }){
-      return data.id === payload.id
+      return data.id === payload.id || data.id === payload.schemaId
     },
     createState({ data, payload }){
-      data.states.push({ id: payload.stateId })
+      data.states.push({
+        id: payload.stateId,
+        view: { x: 0, y: 0 }
+      })
       return { data }
     },
     deleteState({ data, payload }){
@@ -144,6 +127,12 @@ export default {
     createMethod({ data, payload }){
       const { methodName } = payload
       data.methods[methodName] = () => {}
+      return { data }
+    },
+    updateView({ data, payload }){
+      const state = data.states.find(({ id }) => id === payload.id)
+      state.view.x = payload.x
+      state.view.y = payload.y
       return { data }
     },
     getEvents({ data }){

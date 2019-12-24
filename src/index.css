@@ -53,6 +53,10 @@ tr:nth-child(even) {
   background-color: #484848;
 }
 
+hr {
+  border: 1px solid #232323;
+}
+
 .App {
   position: absolute;
   width: 100%;

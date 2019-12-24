@@ -10,7 +10,7 @@ import TransitionDetails from './TransitionDetails'
 import SubscriptionDetails from './SubscriptionDetails'
 import MethodDetails from './MethodDetails'
 import DefinitionDetails from './DefinitionDetails'
-import MachineChart from './MachineChart'
+import StateMachineGraph from './StateMachineGraph'
 import InputButton from './InputButton'
 
 export default () => {
@@ -44,14 +44,15 @@ export default () => {
           <AccordionItem title={id}>
             <TabbedCard
               tabs={[
-                { id: 'chart', label: 'Chart', content: <MachineChart states={states} transitions={transitions} /> },
+                { id: 'diagram', label: 'Diagram', content: <StateMachineGraph schemaId={id} states={states} transitions={transitions} /> },
                 { id: 'states', label: 'States', content: <StateDetails schemaId={id} states={states} /> },
                 { id: 'transitions', label: 'Transitions', content: <TransitionDetails schemaId={id} states={states} transitions={transitions} methods={methods} /> },
                 { id: 'subscriptions', label: 'Subscriptions', content: <SubscriptionDetails schemaId={id} subscriptions={subscriptions} methods={methods} /> },
                 { id: 'publications', label: 'Publications' },
                 { id: 'methods', label: 'Methods', content: <MethodDetails schemaId={id} methods={methods} /> },
                 { id: 'data', label: 'Data' },
-                { id: 'definition', label: 'Definition', content: <DefinitionDetails schema={schema} /> }
+                { id: 'definition', label: 'Definition', content: <DefinitionDetails schema={schema} /> },
+                { id: 'comments', label: 'Comments' }
               ]}
             />
           </AccordionItem>
